@@ -76,15 +76,15 @@ namespace binance_api_csharp_helper.Test
         }
 
         [TestMethod]
-        public void PostBuyMarkettOrder()
+        public void PostBuyMarketOrder()
         {
             var newOrder = binanceClient.PostNewOrder("ethbtc", 0.32m, 0m, OrderType.MARKET, OrderSide.BUY).Result;
         }
 
         [TestMethod]
-        public void PostSellMarkettOrder()
+        public void PostSellMarketOrder()
         {
-            var newOrder = binanceClient.PostNewOrder("ethbtc", 0.00000001m, 0m, OrderType.MARKET, OrderSide.SELL).Result;
+            var newOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderType.MARKET, OrderSide.SELL).Result;
         }
 
         [TestMethod]

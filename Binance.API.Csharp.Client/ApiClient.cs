@@ -51,7 +51,7 @@ namespace Binance.API.Csharp.Client
                 var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 return JsonConvert.DeserializeObject<T>(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return default(T);
             }
