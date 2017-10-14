@@ -24,7 +24,7 @@ Test connectivity to the Rest API.
 ```c#
     public async Task<dynamic> TestConnectivity()
 ```
-#### Example
+##### Example
 ```c#
     var test = binanceClient.TestConnectivity().Result;
 ```
@@ -34,7 +34,7 @@ Test connectivity to the Rest API and get the current server time.
 ```c#
     public async Task<ServerInfo> GetServerTime()
 ```
-#### Example
+##### Example
 ```c#
     var serverTime = binanceClient.GetServerTime().Result;
 ```
@@ -45,7 +45,7 @@ Get order book for a particular symbol.
 ```c#
     public async Task<OrderBook> GetOrderBook(string symbol, int limit = 100)
 ```
-#### Example
+##### Example
 ```c#
     var orderBook = binanceClient.GetOrderBook("ethbtc").Result;
 ```
@@ -55,7 +55,7 @@ Get compressed, aggregate trades. Trades that fill at the time, from the same or
 ```c#
     public async Task<IEnumerable<AggregateTrade>> GetAggregateTrades(string symbol, int limit = 500)
 ```
-#### Example
+##### Example
 ```c#
     var aggregateTrades = binanceClient.GetAggregateTrades("ethbtc").Result;
 ```
@@ -65,7 +65,7 @@ Kline/candlestick bars for a symbol. Klines are uniquely identified by their ope
 ```c#
     public async Task<IEnumerable<Candlestick>> GetCandleSticks(string symbol, TimeInterval interval, int limit = 500)
 ```
-#### Example
+##### Example
 ```c#
     var candlestick = binanceClient.GetCandleSticks("ethbtc", TimeInterval.Minutes_15).Result;
 ```
@@ -75,7 +75,7 @@ Kline/candlestick bars for a symbol. Klines are uniquely identified by their ope
 ```c#
     public async Task<PriceChangeInfo> GetPriceChange24H(string symbol)
 ```
-#### Example
+##### Example
 ```c#
     var priceChangeInfo = binanceClient.GetPriceChange24H("ethbtc").Result;
 ```
@@ -85,7 +85,7 @@ Latest price for all symbols.
 ```c#
     public async Task<IEnumerable<SymbolPrice>> GetAllPrices()
 ```
-#### Example
+##### Example
 ```c#
     var tickerPrices = binanceClient.GetAllPrices().Result;
 ```
@@ -95,7 +95,7 @@ Best price/qty on the order book for all symbols.
 ```c#
     public async Task<IEnumerable<OrderBookTicker>> GetOrderBookTicker()
 ```
-#### Example
+##### Example
 ```c#
     var orderBookTickers = binanceClient.GetOrderBookTicker().Result;
 ```
@@ -106,7 +106,7 @@ Send in a new order
 ```c#
     public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderType orderType, OrderSide side, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
 ```
-### Examples
+#### Examples
 Post new buy order (LIMIT)
 ```c#
     var newOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.04m, OrderType.LIMIT, OrderSide.BUY).Result;
@@ -129,7 +129,7 @@ Test new order creation and signature/recvWindow long. Creates and validates a n
 ```c#
     public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderType orderType, OrderSide side, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
 ```
-### Example
+#### Example
 ```c#
     var testOrder = binanceClient.PostNewOrderTest("ethbtc", 1m, 0.1m, OrderType.LIMIT, OrderSide.BUY).Result;
 ```
@@ -139,7 +139,7 @@ Check an order's status.
 ```c#
     public async Task<Order> GetOrder(string symbol, long? orderId = null, string origClientOrderId = null, long recvWindow = 6000000)
 ```
-### Example
+#### Example
 ```c#
     var order = binanceClient.GetOrder("ethbtc", 8982811).Result;
 ```
@@ -149,7 +149,7 @@ Cancel an active order.
 ```c#
     public async Task<CanceledOrder> CancelOrder(string symbol, long? orderId = null, string origClientOrderId = null, long recvWindow = 6000000)
 ```
-### Example
+#### Example
 ```c#
     var canceledOrder = binanceClient.CancelOrder("ethbtc", 9137796).Result;
 ```
@@ -159,7 +159,7 @@ Get all open orders on a symbol.
 ```c#
     public async Task<IEnumerable<Order>> GetCurrentOpenOrders(string symbol, long recvWindow = 6000000)
 ```
-### Example
+#### Example
 ```c#
     var openOrders = binanceClient.GetCurrentOpenOrders("ethbtc").Result;
 ```
@@ -169,7 +169,7 @@ Get all account orders; active, canceled, or filled.
 ```c#
     public async Task<IEnumerable<Order>> GetAllOrders(string symbol, long? orderId = null, int limit = 500, long recvWindow = 6000000)
 ```
-### Example
+#### Example
 ```c#
     var allOrders = binanceClient.GetAllOrders("ethbtc").Result;
 ```
@@ -179,7 +179,7 @@ Get current account information.
 ```c#
     public async Task<AccountInfo> GetAccountInfo(long recvWindow = 6000000)
 ```
-### Example
+#### Example
 ```c#
     var accountInfo = binanceClient.GetAccountInfo().Result;
 ```
@@ -189,7 +189,7 @@ Get trades for a specific account and symbol.
 ```c#
     public async Task<IEnumerable<Trade>> GetTradeList(string symbol, long recvWindow = 6000000)
 ```
-### Example
+#### Example
 ```c#
     var tradeList = binanceClient.GetTradeList("ethbtc").Result;
 ```
@@ -200,7 +200,7 @@ Start a new user data stream.
 ```c#
     public async Task<UserStreamInfo> StartUserStream()
 ```
-### Example
+#### Example
 ```c#
     var listenKey = binanceClient.StartUserStream().Result.ListenKey;
 ```
@@ -210,7 +210,7 @@ PING a user data stream to prevent a time out.
 ```c#
     public async Task<dynamic> KeepAliveUserStream(string listenKey)
 ```
-### Example
+#### Example
 ```c#
     var ping = binanceClient.KeepAliveUserStream("@ListenKey").Result;
 ```
@@ -220,7 +220,7 @@ Close out a user data stream.
 ```c#
     public async Task<dynamic> CloseUserStream(string listenKey)
 ```
-### Example
+#### Example
 ```c#
     var resut = binanceClient.CloseUserStream("@ListenKey").Result;
 ```
