@@ -1,5 +1,5 @@
 # Binance API Csharp Client
-### C#.NET client for Binance API.
+### C#.NET client for Binance Exchamge API.
 
 ## Features
 - Complete implementation of the Binance API.
@@ -132,7 +132,7 @@ Post new sell order (LIMIT)
 ```
 Post new buy order (MARKET)
 ```c#
-    var newOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderType.MARKET, OrderSide.SELL).Result;
+    var newOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderType.MARKET, OrderSide.BUY).Result;
 ```
 Post new sell order (MARKET)
 ```c#
