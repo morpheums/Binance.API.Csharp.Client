@@ -66,7 +66,7 @@ namespace binance_api_csharp_helper.Test
         [TestMethod]
         public void PostBuyLimitOrder()
         {
-            var newOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.00045m, OrderType.LIMIT, OrderSide.BUY).Result;
+            var newOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.045m, OrderType.LIMIT, OrderSide.BUY).Result;
         }
 
         [TestMethod]
@@ -78,7 +78,7 @@ namespace binance_api_csharp_helper.Test
         [TestMethod]
         public void PostBuyMarkettOrder()
         {
-            var newOrder = binanceClient.PostNewOrder("ethbtc", 0.001m, 0m, OrderType.MARKET, OrderSide.BUY).Result;
+            var newOrder = binanceClient.PostNewOrder("ethbtc", 0.32m, 0m, OrderType.MARKET, OrderSide.BUY).Result;
         }
 
         [TestMethod]
