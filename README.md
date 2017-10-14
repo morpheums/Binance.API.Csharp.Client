@@ -32,7 +32,6 @@ Create an instance of the **BinanceClient** which will receive the previously cr
     var binanceClient = new BinanceClient(apiClient);
 ```
 
-## Usage
 ## General Methods
 ### Test connectivity
 Test connectivity to the Rest API.
