@@ -7,7 +7,7 @@ namespace binance_api_csharp_helper.Test
     [TestClass]
     public class BinanceTest
     {
-        private static ApiClient apiClient = new ApiClient("Qe9D3n0L30xQCeBuY29C0aua7M0qdUZwt9D9oJTKa8LZKu3MsTr7yWDas9WPIphL", "WS9VY7NVq7aJN7ykNkGDMO0WpQH7gh6jlj0uv6jgUlkvhtyaBeF0i3Vy3ZBz3jSa");
+        private static ApiClient apiClient = new ApiClient("@YourApiKey", "YourApiSecret");
         private static BinanceClient binanceClient = new BinanceClient(apiClient);
 
         #region General

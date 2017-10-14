@@ -1,6 +1,21 @@
 # Binance API Csharp Client
-C#.NET client for Binance API.
+### C#.NET client for Binance API.
 
+## Features
+- Complete implementation of the Binance API.
+- API results parsed to concrete objects for better ease of usage.
+- Test project included with all posible API calls.
+
+## Installation
+
+**Nuget Package Manager**
+```
+Install-Package Binance.API.Csharp.Client
+```
+**.NET CLI**
+```
+dotnet add package Binance.API.Csharp.Client
+```
 ## Getting Started
 Create an instance of the **APIClient** which receive the following parameters:
 
@@ -17,6 +32,7 @@ Create an instance of the **BinanceClient** which will receive the previously cr
     var binanceClient = new BinanceClient(apiClient);
 ```
 
+## Usage
 ## General Methods
 ### Test connectivity
 Test connectivity to the Rest API.
