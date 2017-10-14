@@ -239,3 +239,7 @@ Close out a user data stream.
 ```c#
     var resut = binanceClient.CloseUserStream("@ListenKey").Result;
 ```
+
+## License
+
+Binance.API.Csharp.Client is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
