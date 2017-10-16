@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Binance.API.Csharp.Client</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <title>Binance.API.Csharp.Client</title>
     <authors>Jose Mejia</authors>
     <owners>Jose Mejia</owners>
@@ -14,6 +14,7 @@
     <tags>Criptocurrency Binance API dotnet csharp wrapper</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="10.0.3" />
+      <dependency id="WebSocketSharp" version="1.0.3-rc11" />
     </dependencies>
   </metadata>
 </package>
