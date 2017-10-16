@@ -64,33 +64,36 @@ namespace binance_api_csharp_helper.Test
 
         #region Account Information
         [TestMethod]
-        public void PostBuyLimitOrder()
+        public void PostLimitOrder()
         {
-            var newOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.045m, OrderType.LIMIT, OrderSide.BUY).Result;
+            var buyOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.045m, OrderSide.BUY).Result;
+            var sellOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.04m, OrderSide.SELL).Result;
+        }
+
+
+        [TestMethod]
+        public void PostMarketOrder()
+        {
+            var buyOrder = binanceClient.PostNewOrder("ethbtc", 0.32m, 0m, OrderSide.BUY, OrderType.MARKET).Result;
+            var sellOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderSide.SELL, OrderType.MARKET).Result;
         }
 
         [TestMethod]
-        public void PostSellLimitOrder()
+        public void PostStopOrder()
         {
-            var newOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.04m, OrderType.LIMIT, OrderSide.SELL).Result;
+            var stopOrder = binanceClient.PostNewOrder("ethbtc", 0.5m, 0.01m, OrderSide.BUY, stopPrice: 0.5m).Result;
         }
 
         [TestMethod]
-        public void PostBuyMarketOrder()
+        public void PostIcebergOrder()
         {
-            var newOrder = binanceClient.PostNewOrder("ethbtc", 0.32m, 0m, OrderType.MARKET, OrderSide.BUY).Result;
-        }
-
-        [TestMethod]
-        public void PostSellMarketOrder()
-        {
-            var newOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderType.MARKET, OrderSide.SELL).Result;
+            var icebergOrder = binanceClient.PostNewOrder("ethbtc", 2m, 0.01m, OrderSide.BUY, icebergQty: 5m).Result;
         }
 
         [TestMethod]
         public void PostNewLimitOrderTest()
         {
-            var testOrder = binanceClient.PostNewOrderTest("ethbtc", 1m, 0.1m, OrderType.LIMIT, OrderSide.BUY).Result;
+            var testOrder = binanceClient.PostNewOrderTest("ethbtc", 1m, 0.1m, OrderSide.BUY).Result;
         }
 
         [TestMethod]

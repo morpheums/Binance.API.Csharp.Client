@@ -168,7 +168,7 @@ namespace Binance.API.Csharp.Client
 
             return result;
         }
-      
+
         /// <summary>
         /// Best price/qty on the order book for all symbols.
         /// </summary>
@@ -198,7 +198,7 @@ namespace Binance.API.Csharp.Client
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderType orderType, OrderSide side, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
+        public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, decimal stopPrice = 0m, decimal icebergQty = 0m, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -213,7 +213,7 @@ namespace Binance.API.Csharp.Client
                 throw new ArgumentException("price must be greater than zero.", "price");
             }
 
-            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&timeInForce={timeInForce}&quantity={quantity}&price={price}&recvWindow={recvWindow}";
+            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&timeInForce={timeInForce}&quantity={quantity}&price={price}" + (stopPrice > 0m ? $"&stopPrice={stopPrice}" : "") + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "") + $"&recvWindow={recvWindow}";
             var result = await _apiClient.CallAsync<NewOrder>(ApiMethod.POST, EndPoints.NewOrder, true, args);
 
             if (result == null)
@@ -223,7 +223,7 @@ namespace Binance.API.Csharp.Client
 
             return result;
         }
-        
+
         /// <summary>
         /// Test new order creation and signature/recvWindow long. Creates and validates a new order but does not send it into the matching engine.
         /// </summary>
@@ -235,7 +235,7 @@ namespace Binance.API.Csharp.Client
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderType orderType, OrderSide side, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
+        public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, decimal stopPrice = 0m, decimal icebergQty = 0m, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -250,7 +250,7 @@ namespace Binance.API.Csharp.Client
                 throw new ArgumentException("price must be greater than zero.", "price");
             }
 
-            var args = $"symbol={symbol.ToUpper()}&type={orderType}&side={side}&timeInForce={timeInForce}&quantity={quantity}&price={price}&recvWindow={recvWindow}";
+            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&timeInForce={timeInForce}&quantity={quantity}&price={price}" + (stopPrice > 0m ? $"&stopPrice={stopPrice}" : "") + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "") + $"&recvWindow={recvWindow}";
             var result = await _apiClient.CallAsync<dynamic>(ApiMethod.POST, EndPoints.NewOrderTest, true, args);
 
             if (result == null)

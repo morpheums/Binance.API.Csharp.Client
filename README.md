@@ -177,22 +177,25 @@ Send in a new order
 <details>
  <summary>Examples</summary>
 
-Post new buy order (LIMIT)
+Post new order (LIMIT)
 ```c#
-    var newOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.04m, OrderType.LIMIT, OrderSide.BUY).Result;
+    var buyOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.045m, OrderSide.BUY).Result;
+    var sellOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.04m, OrderSide.SELL).Result;
 ```
-Post new sell order (LIMIT)
+Post new order (MARKET)
 ```c#
-    var newOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.04m, OrderType.LIMIT, OrderSide.SELL).Result;
+    var buyMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.32m, 0m, OrderSide.BUY, OrderType.MARKET).Result;
+    var sellMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderSide.SELL, OrderType.MARKET).Result;
 ```
-Post new buy order (MARKET)
+Post new STOP order
 ```c#
-    var newOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderType.MARKET, OrderSide.BUY).Result;
+    var stopOrder = binanceClient.PostNewOrder("ethbtc", 0.5m, 0.01m, OrderSide.BUY, stopPrice: 0.5m).Result;
 ```
-Post new sell order (MARKET)
+Post new ICEBERG order
 ```c#
-    var newOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderType.MARKET, OrderSide.SELL).Result;
+    var icebergOrder = binanceClient.PostNewOrder("ethbtc", 2m, 0.01m, OrderSide.BUY, icebergQty: 5m).Result;
 ```
+
 </details>
 <details>
  <summary>Method Signature</summary>
