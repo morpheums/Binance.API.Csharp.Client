@@ -1,9 +1,8 @@
 ﻿using Binance.API.Csharp.Client.Domain.Interfaces;
-using Binance.API.Csharp.Client.Models.Enums;
 
 namespace Binance.API.Csharp.Client.Domain.Abstract
 {
-    public abstract class BinanceClientConstructor
+    public abstract class BinanceClientAbstract
     {
         /// <summary>
         /// Client to be used to call the API.
@@ -14,7 +13,7 @@ namespace Binance.API.Csharp.Client.Domain.Abstract
         /// Defines the constructor of the Binance client.
         /// </summary>
         /// <param name="apiClient">API client to be used for API calls.</param>
-        public BinanceClientConstructor(IApiClient apiClient) {
+        public BinanceClientAbstract(IApiClient apiClient) {
             _apiClient = apiClient;
         }
     }

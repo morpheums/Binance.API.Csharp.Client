@@ -58,11 +58,17 @@
     <Compile Include="Market\AggregateTrade.cs" />
     <Compile Include="Market\Candlestick.cs" />
     <Compile Include="Market\OrderBook.cs" />
+    <Compile Include="Market\OrderBookOffer.cs" />
     <Compile Include="Market\OrderBookTicker.cs" />
     <Compile Include="Market\PriceChangeInfo.cs" />
     <Compile Include="Market\SymbolPrice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserStream\UserStreamInfo.cs" />
+    <Compile Include="WebSocket\AccountUpdatedMessage.cs" />
+    <Compile Include="WebSocket\DepthMessage.cs" />
+    <Compile Include="WebSocket\KlineMessage.cs" />
+    <Compile Include="WebSocket\OrderOrTradeUpdatedMessage.cs" />
+    <Compile Include="WebSocket\AggregateTradeMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

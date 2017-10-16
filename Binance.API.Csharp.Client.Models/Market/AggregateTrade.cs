@@ -17,7 +17,7 @@ namespace Binance.API.Csharp.Client.Models.Market
         [JsonProperty("T")]
         public long TimeStamp { get; set; }
         [JsonProperty("m")]
-        public bool MadeByBuyer { get; set; }
+        public bool BuyerIsMaker { get; set; }
         [JsonProperty("M")]
         public bool BestPriceMatch { get; set; }
     }

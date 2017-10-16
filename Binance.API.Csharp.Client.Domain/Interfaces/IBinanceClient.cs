@@ -3,8 +3,10 @@ using Binance.API.Csharp.Client.Models.Enums;
 using Binance.API.Csharp.Client.Models.General;
 using Binance.API.Csharp.Client.Models.Market;
 using Binance.API.Csharp.Client.Models.UserStream;
+using Binance.API.Csharp.Client.Models.WebSocket;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static Binance.API.Csharp.Client.Domain.Abstract.ApiClientAbstract;
 
 namespace Binance.API.Csharp.Client.Domain.Interfaces
 {
@@ -171,6 +173,39 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="listenKey">Listenkey of the user stream to close.</param>
         /// <returns></returns>
         Task<dynamic> CloseUserStream(string listenKey);
+        #endregion
+
+        #region WebSocket
+        /// <summary>
+        /// Listen to the Depth endpoint.
+        /// </summary>
+        /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="depthHandler">Handler to be used when a message is received.</param>
+        void ListenDepthEndpoint(string symbol, MessageHandler<DepthMessage> messageHandler);
+
+        /// <summary>
+        /// Listen to the Kline endpoint.
+        /// </summary>
+        /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="interval">Time interval to retreive.</param>
+        /// <param name="klineHandler">Handler to be used when a message is received.</param>
+        void ListenKlineEndpoint(string symbol, TimeInterval interval, MessageHandler<KlineMessage> messageHandler);
+
+        /// <summary>
+        /// Listen to the Trades endpoint.
+        /// </summary>
+        /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="tradeHandler">Handler to be used when a message is received.</param>
+        void ListenTradeEndpoint(string symbol, MessageHandler<AggregateTradeMessage> messageHandler);
+
+        /// <summary>
+        /// Listen to the User Data endpoint.
+        /// </summary>
+        /// <param name="accountInfoHandler">Handler to be used when a account message is received.</param>
+        /// <param name="tradesHandler">Handler to be used when a trade message is received.</param>
+        /// <param name="ordersHandler">Handler to be used when a order message is received.</param>
+        /// <returns></returns>
+        string ListenUserDataEndpoint(MessageHandler<AccountUpdatedMessage> accountInfoHandler, MessageHandler<OrderOrTradeUpdatedMessage> tradesHandler, MessageHandler<OrderOrTradeUpdatedMessage> ordersHandler);
         #endregion
     }
 }

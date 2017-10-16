@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Binance.API.Csharp.Client;
 using Binance.API.Csharp.Client.Models.Enums;
+using System.Threading;
+using Binance.API.Csharp.Client.Models.WebSocket;
 
-namespace binance_api_csharp_helper.Test
+namespace Binance.API.Csharp.Client.Test
 {
     [TestClass]
     public class BinanceTest
@@ -74,8 +75,8 @@ namespace binance_api_csharp_helper.Test
         [TestMethod]
         public void PostMarketOrder()
         {
-            var buyOrder = binanceClient.PostNewOrder("ethbtc", 0.32m, 0m, OrderSide.BUY, OrderType.MARKET).Result;
-            var sellOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderSide.SELL, OrderType.MARKET).Result;
+            var buyMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.32m, 0m, OrderSide.BUY, OrderType.MARKET).Result;
+            var sellMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderSide.SELL, OrderType.MARKET).Result;
         }
 
         [TestMethod]
@@ -152,6 +153,78 @@ namespace binance_api_csharp_helper.Test
         {
             var resut = binanceClient.CloseUserStream("@ListenKey").Result;
         }
+        #endregion
+
+        #region WebSocket
+
+        #region Depth
+        private void DepthHandler(DepthMessage messageData)
+        {
+            var depthData = messageData;
+        }
+
+        [TestMethod]
+        public void TestDepthEndpoint()
+        {
+            binanceClient.ListenDepthEndpoint("ethbtc", DepthHandler);
+            Thread.Sleep(50000);
+        }
+
+        #endregion
+
+        #region Kline
+        private void KlineHandler(KlineMessage messageData)
+        {
+            var klineData = messageData;
+        }
+
+        [TestMethod]
+        public void TestKlineEndpoint()
+        {
+            binanceClient.ListenKlineEndpoint("ethbtc", TimeInterval.Minutes_1, KlineHandler);
+            Thread.Sleep(50000);
+        }
+        #endregion
+
+        #region AggregateTrade
+        private void AggregateTradesHandler(AggregateTradeMessage messageData)
+        {
+            var aggregateTrades = messageData;
+        }
+
+        [TestMethod]
+        public void AggregateTestTradesEndpoint()
+        {
+            binanceClient.ListenTradeEndpoint("ethbtc", AggregateTradesHandler);
+            Thread.Sleep(50000);
+        }
+
+        #endregion
+
+        #region User Info
+        private void AccountHandler(AccountUpdatedMessage messageData)
+        {
+            var accountData = messageData;
+        }
+
+        private void TradesHandler(OrderOrTradeUpdatedMessage messageData)
+        {
+            var tradesData = messageData;
+        }
+
+        private void OrdersHandler(OrderOrTradeUpdatedMessage messageData)
+        {
+            var ordersData = messageData;
+        }
+
+        [TestMethod]
+        public void TestUserDataEndpoint()
+        {
+            binanceClient.ListenUserDataEndpoint(AccountHandler, TradesHandler, OrdersHandler);
+            Thread.Sleep(50000);
+        }
+        #endregion
+
         #endregion
     }
 }

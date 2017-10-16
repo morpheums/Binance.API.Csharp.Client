@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using WebSocketSharp;
 
 namespace Binance.API.Csharp.Client.Domain.Abstract
 {
-    public abstract class ApiClientConstructor
+    public abstract class ApiClientAbstract
     {
         /// <summary>
         /// Secret used to authenticate within the API.
@@ -26,16 +28,35 @@ namespace Binance.API.Csharp.Client.Domain.Abstract
         public readonly HttpClient _httpClient;
 
         /// <summary>
+        /// URL of the WebSocket Endpoint
+        /// </summary>
+        public readonly string _webSocketEndpoint = "";
+
+        /// <summary>
+        /// Used to store all the opened web sockets.
+        /// </summary>
+        public List<WebSocket> _openSockets;
+
+        /// <summary>
+        /// Delegate for the messages returned by the websockets.
+        /// </summary>
+        /// <typeparam name="T">Type used to parsed the response message.</typeparam>
+        /// <param name="messageData">Websocket response data.</param>
+        public delegate void MessageHandler<T>(T messageData);
+
+        /// <summary>
         /// Defines the constructor of the Api Client.
         /// </summary>
         /// <param name="apiKey">Key used to authenticate within the API.</param>
         /// <param name="apiSecret">API secret used to signed API calls.</param>
         /// <param name="apiUrl">API based url.</param>
-        public ApiClientConstructor(string apiKey, string apiSecret, string apiUrl = @"https://www.binance.com")
+        public ApiClientAbstract(string apiKey, string apiSecret, string apiUrl = @"https://www.binance.com", string webSocketEndpoint = @"wss://stream.binance.com:9443/ws/")
         {
             _apiUrl = apiUrl;
             _apiKey = apiKey;
             _apiSecret = apiSecret;
+            _webSocketEndpoint = webSocketEndpoint;
+            _openSockets = new List<WebSocket>();
             _httpClient = new HttpClient
             {
                 BaseAddress = new Uri(_apiUrl)
