@@ -36,10 +36,13 @@ Create an instance of the **BinanceClient** which will receive the previously cr
 ## General Methods
 ### Test connectivity
 Test connectivity to the Rest API.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var test = binanceClient.TestConnectivity().Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -50,10 +53,13 @@ Test connectivity to the Rest API.
 
 ### Check server time
 Test connectivity to the Rest API and get the current server time.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var serverTime = binanceClient.GetServerTime().Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -65,10 +71,13 @@ Test connectivity to the Rest API and get the current server time.
 ## Market Data Methods
 ### Get order book
 Get order book for a particular symbol.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var orderBook = binanceClient.GetOrderBook("ethbtc").Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -79,10 +88,13 @@ Get order book for a particular symbol.
 
 ### Get compressed/aggregate trades list
 Get compressed, aggregate trades. Trades that fill at the time, from the same order, with the same price will have the quantity aggregated.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var aggregateTrades = binanceClient.GetAggregateTrades("ethbtc").Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -93,10 +105,13 @@ Get compressed, aggregate trades. Trades that fill at the time, from the same or
 
 ### Get kline/candlesticks
 Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var candlestick = binanceClient.GetCandleSticks("ethbtc", TimeInterval.Minutes_15).Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -107,10 +122,13 @@ Kline/candlestick bars for a symbol. Klines are uniquely identified by their ope
 
 ### Get 24hr ticker price change statistics
 24 hour price change statistics.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var priceChangeInfo = binanceClient.GetPriceChange24H("ethbtc").Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -121,10 +139,13 @@ Kline/candlestick bars for a symbol. Klines are uniquely identified by their ope
 
 ### Get symbols price ticker
 Latest price for all symbols.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var tickerPrices = binanceClient.GetAllPrices().Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -135,10 +156,13 @@ Latest price for all symbols.
 
 ### Get symbols order book ticker
 Best price/qty on the order book for all symbols.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var orderBookTickers = binanceClient.GetOrderBookTicker().Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -150,7 +174,9 @@ Best price/qty on the order book for all symbols.
 ## Account Methods
 ### Post new order
 Send in a new order
-####Examples
+<details>
+ <summary>Examples</summary>
+
 Post new buy order (LIMIT)
 ```c#
     var newOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.04m, OrderType.LIMIT, OrderSide.BUY).Result;
@@ -167,6 +193,7 @@ Post new sell order (MARKET)
 ```c#
     var newOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderType.MARKET, OrderSide.SELL).Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -177,10 +204,13 @@ Post new sell order (MARKET)
 
 ### Post test order 
 Test new order creation and signature/recvWindow long. Creates and validates a new order but does not send it into the matching engine.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var testOrder = binanceClient.PostNewOrderTest("ethbtc", 1m, 0.1m, OrderType.LIMIT, OrderSide.BUY).Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -191,10 +221,13 @@ Test new order creation and signature/recvWindow long. Creates and validates a n
 
 ### Get order
 Check an order's status.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var order = binanceClient.GetOrder("ethbtc", 8982811).Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -205,10 +238,13 @@ Check an order's status.
 
  ### Cancel order 
 Cancel an active order.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var canceledOrder = binanceClient.CancelOrder("ethbtc", 9137796).Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -219,10 +255,13 @@ Cancel an active order.
 
 ### Get current open orders
 Get all open orders on a symbol.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var openOrders = binanceClient.GetCurrentOpenOrders("ethbtc").Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -233,10 +272,13 @@ Get all open orders on a symbol.
 
 ### Get all orders
 Get all account orders; active, canceled, or filled.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var allOrders = binanceClient.GetAllOrders("ethbtc").Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -247,10 +289,13 @@ Get all account orders; active, canceled, or filled.
 
 ### Get account info
 Get current account information.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var accountInfo = binanceClient.GetAccountInfo().Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -261,10 +306,13 @@ Get current account information.
 
 ### Get account trade list
 Get trades for a specific account and symbol.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var tradeList = binanceClient.GetTradeList("ethbtc").Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -276,10 +324,13 @@ Get trades for a specific account and symbol.
 ## User Stream Methods
 ### Start user stream
 Start a new user data stream.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var listenKey = binanceClient.StartUserStream().Result.ListenKey;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -290,10 +341,13 @@ Start a new user data stream.
 
 ### Keep alive user data stream
 PING a user data stream to prevent a time out.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var ping = binanceClient.KeepAliveUserStream("@ListenKey").Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
@@ -304,10 +358,13 @@ PING a user data stream to prevent a time out.
 
 ### Close user data stream
 Close out a user data stream.
-#### Example
+<details>
+ <summary>Example</summary>
+ 
 ```c#
     var resut = binanceClient.CloseUserStream("@ListenKey").Result;
 ```
+</details>
 <details>
  <summary>Method Signature</summary>
 
