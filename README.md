@@ -388,7 +388,6 @@ Listen to the Depth endpoint.
         var depthData = messageData;
     }
 
-    [TestMethod]
     public void TestDepthEndpoint()
     {
         binanceClient.ListenDepthEndpoint("ethbtc", DepthHandler);
@@ -415,7 +414,6 @@ Listen to the Kline endpoint.
         var klineData = messageData;
     }
 
-    [TestMethod]
     public void TestKlineEndpoint()
     {
         binanceClient.ListenKlineEndpoint("ethbtc", TimeInterval.Minutes_1, KlineHandler);
@@ -442,7 +440,6 @@ Listen to the Trades endpoint.
         var aggregateTrades = messageData;
     }
 
-    [TestMethod]
     public void AggregateTestTradesEndpoint()
     {
         binanceClient.ListenTradeEndpoint("ethbtc", AggregateTradesHandler);
@@ -479,7 +476,6 @@ Listen to the User Data endpoint.
         var ordersData = messageData;
     }
 
-    [TestMethod]
     public void TestUserDataEndpoint()
     {
         binanceClient.ListenUserDataEndpoint(AccountHandler, TradesHandler, OrdersHandler);
