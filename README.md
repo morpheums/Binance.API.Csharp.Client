@@ -376,6 +376,126 @@ Close out a user data stream.
 ```
 </details>
 
+## Websocket Methods
+### Depth messages
+Listen to the Depth endpoint.
+<details>
+ <summary>Example</summary>
+ 
+```c#
+    private void DepthHandler(DepthMessage messageData)
+    {
+        var depthData = messageData;
+    }
+
+    [TestMethod]
+    public void TestDepthEndpoint()
+    {
+        binanceClient.ListenDepthEndpoint("ethbtc", DepthHandler);
+        Thread.Sleep(50000);
+    }
+```
+</details>
+<details>
+ <summary>Method Signature</summary>
+
+```c#
+    public void ListenDepthEndpoint(string symbol, MessageHandler<DepthMessage> depthHandler)
+```
+</details>
+
+### KLine messages
+Listen to the Kline endpoint.
+<details>
+ <summary>Example</summary>
+ 
+```c#
+    private void KlineHandler(KlineMessage messageData)
+    {
+        var klineData = messageData;
+    }
+
+    [TestMethod]
+    public void TestKlineEndpoint()
+    {
+        binanceClient.ListenKlineEndpoint("ethbtc", TimeInterval.Minutes_1, KlineHandler);
+        Thread.Sleep(50000);
+    }
+```
+</details>
+<details>
+ <summary>Method Signature</summary>
+
+```c#
+    public void ListenKlineEndpoint(string symbol, TimeInterval interval, MessageHandler<KlineMessage> klineHandler)
+```
+</details>
+
+### Trades messages
+Listen to the Trades endpoint.
+<details>
+ <summary>Example</summary>
+ 
+```c#
+    private void AggregateTradesHandler(AggregateTradeMessage messageData)
+    {
+        var aggregateTrades = messageData;
+    }
+
+    [TestMethod]
+    public void AggregateTestTradesEndpoint()
+    {
+        binanceClient.ListenTradeEndpoint("ethbtc", AggregateTradesHandler);
+        Thread.Sleep(50000);
+    }
+```
+</details>
+<details>
+ <summary>Method Signature</summary>
+
+```c#
+    public void ListenTradeEndpoint(string symbol, MessageHandler<AggregateTradeMessage> tradeHandler)
+```
+</details>
+
+### User Data messages
+Listen to the User Data endpoint.
+<details>
+ <summary>Example</summary>
+ 
+```c#
+    private void AccountHandler(AccountUpdatedMessage messageData)
+    {
+        var accountData = messageData;
+    }
+
+    private void TradesHandler(OrderOrTradeUpdatedMessage messageData)
+    {
+        var tradesData = messageData;
+    }
+
+    private void OrdersHandler(OrderOrTradeUpdatedMessage messageData)
+    {
+        var ordersData = messageData;
+    }
+
+    [TestMethod]
+    public void TestUserDataEndpoint()
+    {
+        binanceClient.ListenUserDataEndpoint(AccountHandler, TradesHandler, OrdersHandler);
+        Thread.Sleep(50000);
+    }
+```
+</details>
+<details>
+ <summary>Method Signature</summary>
+
+```c#
+    public string ListenUserDataEndpoint(MessageHandler<AccountUpdatedMessage> accountInfoHandler, MessageHandler<OrderOrTradeUpdatedMessage> tradesHandler, MessageHandler<OrderOrTradeUpdatedMessage> ordersHandler)
+```
+</details>
+
+
 ## License
 
 Binance.API.Csharp.Client is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
