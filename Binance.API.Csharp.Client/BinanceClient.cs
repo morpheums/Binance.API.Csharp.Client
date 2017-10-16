@@ -5,6 +5,7 @@ using Binance.API.Csharp.Client.Models.Enums;
 using Binance.API.Csharp.Client.Models.General;
 using Binance.API.Csharp.Client.Models.Market;
 using Binance.API.Csharp.Client.Models.UserStream;
+using Binance.API.Csharp.Client.Models.WebSocket;
 using Binance.API.Csharp.Client.Utils;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Binance.API.Csharp.Client
 {
-    public class BinanceClient : BinanceClientConstructor, IBinanceClient
+    public class BinanceClient : BinanceClientAbstract, IBinanceClient
     {
         /// <summary>
         /// ctor.
@@ -168,7 +169,7 @@ namespace Binance.API.Csharp.Client
 
             return result;
         }
-      
+
         /// <summary>
         /// Best price/qty on the order book for all symbols.
         /// </summary>
@@ -198,7 +199,7 @@ namespace Binance.API.Csharp.Client
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderType orderType, OrderSide side, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
+        public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, decimal stopPrice = 0m, decimal icebergQty = 0m, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -213,7 +214,7 @@ namespace Binance.API.Csharp.Client
                 throw new ArgumentException("price must be greater than zero.", "price");
             }
 
-            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&timeInForce={timeInForce}&quantity={quantity}&price={price}&recvWindow={recvWindow}";
+            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&timeInForce={timeInForce}&quantity={quantity}&price={price}" + (stopPrice > 0m ? $"&stopPrice={stopPrice}" : "") + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "") + $"&recvWindow={recvWindow}";
             var result = await _apiClient.CallAsync<NewOrder>(ApiMethod.POST, EndPoints.NewOrder, true, args);
 
             if (result == null)
@@ -223,7 +224,7 @@ namespace Binance.API.Csharp.Client
 
             return result;
         }
-        
+
         /// <summary>
         /// Test new order creation and signature/recvWindow long. Creates and validates a new order but does not send it into the matching engine.
         /// </summary>
@@ -235,7 +236,7 @@ namespace Binance.API.Csharp.Client
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderType orderType, OrderSide side, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
+        public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, decimal stopPrice = 0m, decimal icebergQty = 0m, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -250,7 +251,7 @@ namespace Binance.API.Csharp.Client
                 throw new ArgumentException("price must be greater than zero.", "price");
             }
 
-            var args = $"symbol={symbol.ToUpper()}&type={orderType}&side={side}&timeInForce={timeInForce}&quantity={quantity}&price={price}&recvWindow={recvWindow}";
+            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&timeInForce={timeInForce}&quantity={quantity}&price={price}" + (stopPrice > 0m ? $"&stopPrice={stopPrice}" : "") + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "") + $"&recvWindow={recvWindow}";
             var result = await _apiClient.CallAsync<dynamic>(ApiMethod.POST, EndPoints.NewOrderTest, true, args);
 
             if (result == null)
@@ -489,6 +490,73 @@ namespace Binance.API.Csharp.Client
             }
 
             return result;
+        }
+        #endregion
+
+        #region Web Socket Client
+        /// <summary>
+        /// Listen to the Depth endpoint.
+        /// </summary>
+        /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="depthHandler">Handler to be used when a message is received.</param>
+        public void ListenDepthEndpoint(string symbol, ApiClientAbstract.MessageHandler<DepthMessage> depthHandler)
+        {
+            if (string.IsNullOrWhiteSpace(symbol))
+            {
+                throw new ArgumentException("symbol cannot be empty. ", "symbol");
+            }
+
+            var param = symbol + "@depth";
+            _apiClient.ConnectToWebSocket(param, depthHandler, true);
+        }
+
+        /// <summary>
+        /// Listen to the Kline endpoint.
+        /// </summary>
+        /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="interval">Time interval to retreive.</param>
+        /// <param name="klineHandler">Handler to be used when a message is received.</param>
+        public void ListenKlineEndpoint(string symbol, TimeInterval interval, ApiClientAbstract.MessageHandler<KlineMessage> klineHandler)
+        {
+            if (string.IsNullOrWhiteSpace(symbol))
+            {
+                throw new ArgumentException("symbol cannot be empty. ", "symbol");
+            }
+
+            var param = symbol + $"@kline_{interval.GetDescription()}";
+            _apiClient.ConnectToWebSocket(param, klineHandler);
+        }
+
+        /// <summary>
+        /// Listen to the Trades endpoint.
+        /// </summary>
+        /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="tradeHandler">Handler to be used when a message is received.</param>
+        public void ListenTradeEndpoint(string symbol, ApiClientAbstract.MessageHandler<AggregateTradeMessage> tradeHandler)
+        {
+            if (string.IsNullOrWhiteSpace(symbol))
+            {
+                throw new ArgumentException("symbol cannot be empty. ", "symbol");
+            }
+
+            var param = symbol + "@aggTrade";
+            _apiClient.ConnectToWebSocket(param, tradeHandler);
+        }
+
+        /// <summary>
+        /// Listen to the User Data endpoint.
+        /// </summary>
+        /// <param name="accountInfoHandler">Handler to be used when a account message is received.</param>
+        /// <param name="tradesHandler">Handler to be used when a trade message is received.</param>
+        /// <param name="ordersHandler">Handler to be used when a order message is received.</param>
+        /// <returns></returns>
+        public string ListenUserDataEndpoint(ApiClientAbstract.MessageHandler<AccountUpdatedMessage> accountInfoHandler, ApiClientAbstract.MessageHandler<OrderOrTradeUpdatedMessage> tradesHandler, ApiClientAbstract.MessageHandler<OrderOrTradeUpdatedMessage> ordersHandler)
+        {
+            var listenKey = StartUserStream().Result.ListenKey;
+
+            _apiClient.ConnectToUserDataWebSocket(listenKey, accountInfoHandler, tradesHandler, ordersHandler);
+
+            return listenKey;
         }
         #endregion
     }
