@@ -37,7 +37,7 @@ Create an instance of the **BinanceClient** which will receive the previously cr
 ### Test connectivity
 Test connectivity to the Rest API.
 <details>
- <summary>Example</summary>
+ <summary> ###Example</summary>
  
 ```c#
     var test = binanceClient.TestConnectivity().Result;
