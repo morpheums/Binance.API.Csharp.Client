@@ -42,11 +42,12 @@ Test connectivity to the Rest API.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<dynamic> TestConnectivity()
 ```
 </details>
+
 ### Check server time
 Test connectivity to the Rest API and get the current server time.
 #### Example
@@ -55,11 +56,12 @@ Test connectivity to the Rest API and get the current server time.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<ServerInfo> GetServerTime()
 ```
 </details>
+
 ## Market Data Methods
 ### Get order book
 Get order book for a particular symbol.
@@ -69,11 +71,12 @@ Get order book for a particular symbol.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<OrderBook> GetOrderBook(string symbol, int limit = 100)
 ```
 </details>
+
 ### Get compressed/aggregate trades list
 Get compressed, aggregate trades. Trades that fill at the time, from the same order, with the same price will have the quantity aggregated.
 #### Example
@@ -82,11 +85,12 @@ Get compressed, aggregate trades. Trades that fill at the time, from the same or
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<IEnumerable<AggregateTrade>> GetAggregateTrades(string symbol, int limit = 500)
 ```
 </details>
+
 ### Get kline/candlesticks
 Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.
 #### Example
@@ -95,11 +99,12 @@ Kline/candlestick bars for a symbol. Klines are uniquely identified by their ope
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<IEnumerable<Candlestick>> GetCandleSticks(string symbol, TimeInterval interval, int limit = 500)
 ```
 </details>
+
 ### Get 24hr ticker price change statistics
 24 hour price change statistics.
 #### Example
@@ -108,11 +113,12 @@ Kline/candlestick bars for a symbol. Klines are uniquely identified by their ope
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<PriceChangeInfo> GetPriceChange24H(string symbol)
 ```
 </details>
+
 ### Get symbols price ticker
 Latest price for all symbols.
 #### Example
@@ -121,11 +127,12 @@ Latest price for all symbols.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<IEnumerable<SymbolPrice>> GetAllPrices()
 ```
 </details>
+
 ### Get symbols order book ticker
 Best price/qty on the order book for all symbols.
 #### Example
@@ -134,11 +141,12 @@ Best price/qty on the order book for all symbols.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<IEnumerable<OrderBookTicker>> GetOrderBookTicker()
 ```
 </details>
+
 ## Account Methods
 ### Post new order
 Send in a new order
@@ -161,11 +169,12 @@ Post new sell order (MARKET)
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderType orderType, OrderSide side, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
 ```
 </details>
+
 ### Post test order 
 Test new order creation and signature/recvWindow long. Creates and validates a new order but does not send it into the matching engine.
 #### Example
@@ -174,11 +183,12 @@ Test new order creation and signature/recvWindow long. Creates and validates a n
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderType orderType, OrderSide side, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
 ```
 </details>
+
 ### Get order
 Check an order's status.
 #### Example
@@ -187,11 +197,12 @@ Check an order's status.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<Order> GetOrder(string symbol, long? orderId = null, string origClientOrderId = null, long recvWindow = 6000000)
 ```
 </details>
+
  ### Cancel order 
 Cancel an active order.
 #### Example
@@ -200,11 +211,12 @@ Cancel an active order.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<CanceledOrder> CancelOrder(string symbol, long? orderId = null, string origClientOrderId = null, long recvWindow = 6000000)
 ```
 </details>
+
 ### Get current open orders
 Get all open orders on a symbol.
 #### Example
@@ -213,11 +225,12 @@ Get all open orders on a symbol.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<IEnumerable<Order>> GetCurrentOpenOrders(string symbol, long recvWindow = 6000000)
 ```
 </details>
+
 ### Get all orders
 Get all account orders; active, canceled, or filled.
 #### Example
@@ -226,11 +239,12 @@ Get all account orders; active, canceled, or filled.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<IEnumerable<Order>> GetAllOrders(string symbol, long? orderId = null, int limit = 500, long recvWindow = 6000000)
 ```
 </details>
+
 ### Get account info
 Get current account information.
 #### Example
@@ -239,11 +253,12 @@ Get current account information.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<AccountInfo> GetAccountInfo(long recvWindow = 6000000)
 ```
 </details>
+
 ### Get account trade list
 Get trades for a specific account and symbol.
 #### Example
@@ -252,11 +267,12 @@ Get trades for a specific account and symbol.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<IEnumerable<Trade>> GetTradeList(string symbol, long recvWindow = 6000000)
 ```
 </details>
+
 ## User Stream Methods
 ### Start user stream
 Start a new user data stream.
@@ -266,11 +282,12 @@ Start a new user data stream.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<UserStreamInfo> StartUserStream()
 ```
 </details>
+
 ### Keep alive user data stream
 PING a user data stream to prevent a time out.
 #### Example
@@ -279,11 +296,12 @@ PING a user data stream to prevent a time out.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<dynamic> KeepAliveUserStream(string listenKey)
 ```
 </details>
+
 ### Close user data stream
 Close out a user data stream.
 #### Example
@@ -292,11 +310,12 @@ Close out a user data stream.
 ```
 <details>
  <summary>Method Signature</summary>
- 
+
 ```c#
     public async Task<dynamic> CloseUserStream(string listenKey)
 ```
 </details>
+
 
 ## License
 
