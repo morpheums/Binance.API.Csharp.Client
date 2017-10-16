@@ -376,7 +376,6 @@ Close out a user data stream.
 ```
 </details>
 
-
 ## License
 
 Binance.API.Csharp.Client is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
