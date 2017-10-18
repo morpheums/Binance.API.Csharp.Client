@@ -11,7 +11,7 @@
 
 **Nuget Package Manager**
 ```
-Install-Package Binance.API.Csharp.Client
+PM> Install-Package Binance.API.Csharp.Client
 ```
 **.NET CLI**
 ```
