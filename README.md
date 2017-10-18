@@ -4,6 +4,8 @@
 
 ## Features
 - Complete implementation of the Binance API.
+- Binance WebSockets implementation.
+- Transactions validation using [Binance Trading Rules](https://support.binance.com/hc/en-us/articles/115000594711-Trading-Rule)
 - API results parsed to concrete objects for better ease of usage.
 - Test project included with all posible API calls.
 
@@ -184,18 +186,9 @@ Post new order (LIMIT)
 ```
 Post new order (MARKET)
 ```c#
-    var buyMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.32m, 0m, OrderSide.BUY, OrderType.MARKET).Result;
-    var sellMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderSide.SELL, OrderType.MARKET).Result;
+    var buyMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.01m, 0m, OrderSide.BUY, OrderType.MARKET).Result;
+    var sellMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.01m, 0m, OrderSide.SELL, OrderType.MARKET).Result;
 ```
-Post new STOP order
-```c#
-    var stopOrder = binanceClient.PostNewOrder("ethbtc", 0.5m, 0.01m, OrderSide.BUY, stopPrice: 0.5m).Result;
-```
-Post new ICEBERG order
-```c#
-    var icebergOrder = binanceClient.PostNewOrder("ethbtc", 2m, 0.01m, OrderSide.BUY, icebergQty: 5m).Result;
-```
-
 </details>
 <details>
  <summary>Method Signature</summary>
