@@ -9,19 +9,55 @@ using Binance.API.Csharp.Client.Models.WebSocket;
 using Binance.API.Csharp.Client.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Binance.API.Csharp.Client
 {
     public class BinanceClient : BinanceClientAbstract, IBinanceClient
     {
+        private TradingRules _tradingRules = null;
         /// <summary>
         /// ctor.
         /// </summary>
         /// <param name="apiClient">API client to be used for API calls.</param>
         public BinanceClient(IApiClient apiClient) : base(apiClient)
         {
+            _tradingRules = new TradingRules();
         }
+
+        #region Private Methods
+        /// <summary>
+        /// Validates that a new order is valid before posting it.
+        /// </summary>
+        /// <param name="orderType">Order type (LIMIT-MARKET).</param>
+        /// <param name="tickerInfo">Object with the information of the ticker.</param>
+        /// <param name="unitPrice">Price of the transaction.</param>
+        /// <param name="quantity">Quantity to transaction.</param>
+        /// <param name="stopPrice">Price for stop orders.</param>
+        private void ValidateOrderValue(OrderType orderType, TickerInfo tickerInfo, decimal unitPrice, decimal quantity)
+        {
+            if (tickerInfo == null)
+            {
+                throw new ArgumentException("Invalid symbol. ", "symbol");
+            }
+            if (quantity <= 0m)
+            {
+                throw new ArgumentException("quantity must be greater than zero.", "quantity");
+            }
+            if (orderType == OrderType.LIMIT)
+            {
+                if (unitPrice <= 0m)
+                {
+                    throw new ArgumentException("price must be greater than zero.", "price");
+                }
+                if ((unitPrice * quantity) < tickerInfo.MinOrderPrice)
+                {
+                    throw new Exception($"Order value for this symbol is lower than allowed! Order value for this symbol must be greater than: {tickerInfo.MinOrderPrice}.");
+                }
+            }
+        }
+        #endregion
 
         #region General
         /// Test connectivity to the Rest API.
@@ -30,11 +66,6 @@ namespace Binance.API.Csharp.Client
         public async Task<dynamic> TestConnectivity()
         {
             var result = await _apiClient.CallAsync<dynamic>(ApiMethod.GET, EndPoints.TestConnectivity, false);
-
-            if (result == null)
-            {
-                throw new Exception();
-            }
 
             return result;
         }
@@ -45,11 +76,6 @@ namespace Binance.API.Csharp.Client
         public async Task<ServerInfo> GetServerTime()
         {
             var result = await _apiClient.CallAsync<ServerInfo>(ApiMethod.GET, EndPoints.CheckServerTime, false);
-
-            if (result == null)
-            {
-                throw new Exception();
-            }
 
             return result;
         }
@@ -70,11 +96,6 @@ namespace Binance.API.Csharp.Client
             }
 
             var result = await _apiClient.CallAsync<dynamic>(ApiMethod.GET, EndPoints.OrderBook, false, $"symbol={symbol.ToUpper()}&limit={limit}");
-
-            if (result == null)
-            {
-                throw new Exception();
-            }
 
             var parser = new CustomParser();
             var parsedResult = parser.GetParsedOrderBook(result);
@@ -97,11 +118,6 @@ namespace Binance.API.Csharp.Client
 
             var result = await _apiClient.CallAsync<IEnumerable<AggregateTrade>>(ApiMethod.GET, EndPoints.AggregateTrades, false, $"symbol={symbol.ToUpper()}&limit={limit}");
 
-            if (result == null)
-            {
-                throw new Exception();
-            }
-
             return result;
         }
 
@@ -120,11 +136,6 @@ namespace Binance.API.Csharp.Client
             }
 
             var result = await _apiClient.CallAsync<dynamic>(ApiMethod.GET, EndPoints.Candlesticks, false, $"symbol={symbol.ToUpper()}&interval={interval.GetDescription()}&limit={limit}");
-
-            if (result == null)
-            {
-                throw new Exception();
-            }
 
             var parser = new CustomParser();
             var parsedResult = parser.GetParsedCandlestick(result);
@@ -146,11 +157,6 @@ namespace Binance.API.Csharp.Client
 
             var result = await _apiClient.CallAsync<PriceChangeInfo>(ApiMethod.GET, EndPoints.TickerPriceChange24H, false, $"symbol={symbol.ToUpper()}");
 
-            if (result == null)
-            {
-                throw new Exception();
-            }
-
             return result;
         }
 
@@ -162,11 +168,6 @@ namespace Binance.API.Csharp.Client
         {
             var result = await _apiClient.CallAsync<IEnumerable<SymbolPrice>>(ApiMethod.GET, EndPoints.AllPrices, false);
 
-            if (result == null)
-            {
-                throw new Exception();
-            }
-
             return result;
         }
 
@@ -177,11 +178,6 @@ namespace Binance.API.Csharp.Client
         public async Task<IEnumerable<OrderBookTicker>> GetOrderBookTicker()
         {
             var result = await _apiClient.CallAsync<IEnumerable<OrderBookTicker>>(ApiMethod.GET, EndPoints.OrderBookTicker, false);
-
-            if (result == null)
-            {
-                throw new Exception();
-            }
 
             return result;
         }
@@ -199,28 +195,18 @@ namespace Binance.API.Csharp.Client
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, decimal stopPrice = 0m, decimal icebergQty = 0m, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
+        public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
         {
-            if (string.IsNullOrWhiteSpace(symbol))
-            {
-                throw new ArgumentException("symbol cannot be empty. ", "symbol");
-            }
-            if (quantity <= 0m)
-            {
-                throw new ArgumentException("quantity must be greater than zero.", "quantity");
-            }
-            if (orderType == OrderType.LIMIT && price <= 0m)
-            {
-                throw new ArgumentException("price must be greater than zero.", "price");
-            }
+            var tickerInfo = _tradingRules.TickersInfo.Where(r => r.Ticker == symbol.ToUpper()).FirstOrDefault();
 
-            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&timeInForce={timeInForce}&quantity={quantity}&price={price}" + (stopPrice > 0m ? $"&stopPrice={stopPrice}" : "") + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "") + $"&recvWindow={recvWindow}";
+            //Validates that the order is valid.
+            ValidateOrderValue(orderType, tickerInfo, price, quantity);
+
+            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&quantity={quantity}"
+                + (orderType == OrderType.LIMIT ? $"&timeInForce={timeInForce}" : "")
+                + (orderType == OrderType.LIMIT ? $"&price={price}" : "")
+                + $"&recvWindow={recvWindow}";
             var result = await _apiClient.CallAsync<NewOrder>(ApiMethod.POST, EndPoints.NewOrder, true, args);
-
-            if (result == null)
-            {
-                throw new Exception();
-            }
 
             return result;
         }
@@ -236,28 +222,18 @@ namespace Binance.API.Csharp.Client
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, decimal stopPrice = 0m, decimal icebergQty = 0m, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
+        public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
         {
-            if (string.IsNullOrWhiteSpace(symbol))
-            {
-                throw new ArgumentException("symbol cannot be empty. ", "symbol");
-            }
-            if (quantity <= 0)
-            {
-                throw new ArgumentException("quantity must be greater than zero.", "quantity");
-            }
-            if (price <= 0)
-            {
-                throw new ArgumentException("price must be greater than zero.", "price");
-            }
+            var tickerInfo = _tradingRules.TickersInfo.Where(r => r.Ticker == symbol.ToUpper()).FirstOrDefault();
 
-            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&timeInForce={timeInForce}&quantity={quantity}&price={price}" + (stopPrice > 0m ? $"&stopPrice={stopPrice}" : "") + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "") + $"&recvWindow={recvWindow}";
+            //Validates that the order is valid.
+            ValidateOrderValue(orderType, tickerInfo, price, quantity);
+
+            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&quantity={quantity}"
+                + (orderType == OrderType.LIMIT ? $"&timeInForce={timeInForce}" : "")
+                + (orderType == OrderType.LIMIT ? $"&price={price}" : "")
+                + $"&recvWindow={recvWindow}";
             var result = await _apiClient.CallAsync<dynamic>(ApiMethod.POST, EndPoints.NewOrderTest, true, args);
-
-            if (result == null)
-            {
-                throw new Exception();
-            }
 
             return result;
         }
@@ -294,11 +270,6 @@ namespace Binance.API.Csharp.Client
 
             var result = await _apiClient.CallAsync<Order>(ApiMethod.GET, EndPoints.QueryOrder, true, args);
 
-            if (result == null)
-            {
-                throw new Exception();
-            }
-
             return result;
         }
 
@@ -334,11 +305,6 @@ namespace Binance.API.Csharp.Client
 
             var result = await _apiClient.CallAsync<CanceledOrder>(ApiMethod.DELETE, EndPoints.CancelOrder, true, args);
 
-            if (result == null)
-            {
-                throw new Exception();
-            }
-
             return result;
         }
 
@@ -356,11 +322,6 @@ namespace Binance.API.Csharp.Client
             }
 
             var result = await _apiClient.CallAsync<IEnumerable<Order>>(ApiMethod.GET, EndPoints.CurrentOpenOrders, true, $"symbol={symbol.ToUpper()}&recvWindow={recvWindow}");
-
-            if (result == null)
-            {
-                throw new Exception();
-            }
 
             return result;
         }
@@ -382,11 +343,6 @@ namespace Binance.API.Csharp.Client
 
             var result = await _apiClient.CallAsync<IEnumerable<Order>>(ApiMethod.GET, EndPoints.AllOrders, true, $"symbol={symbol.ToUpper()}&limit={limit}&recvWindow={recvWindow}" + (orderId.HasValue ? $"&orderId={orderId.Value}" : ""));
 
-            if (result == null)
-            {
-                throw new Exception();
-            }
-
             return result;
         }
 
@@ -398,11 +354,6 @@ namespace Binance.API.Csharp.Client
         public async Task<AccountInfo> GetAccountInfo(long recvWindow = 6000000)
         {
             var result = await _apiClient.CallAsync<AccountInfo>(ApiMethod.GET, EndPoints.AccountInformation, true, $"recvWindow={recvWindow}");
-
-            if (result == null)
-            {
-                throw new Exception();
-            }
 
             return result;
         }
@@ -422,11 +373,6 @@ namespace Binance.API.Csharp.Client
 
             var result = await _apiClient.CallAsync<IEnumerable<Trade>>(ApiMethod.GET, EndPoints.TradeList, true, $"symbol={symbol.ToUpper()}&recvWindow={recvWindow}");
 
-            if (result == null)
-            {
-                throw new Exception();
-            }
-
             return result;
         }
         #endregion
@@ -439,11 +385,6 @@ namespace Binance.API.Csharp.Client
         public async Task<UserStreamInfo> StartUserStream()
         {
             var result = await _apiClient.CallAsync<UserStreamInfo>(ApiMethod.POST, EndPoints.StartUserStream, false);
-
-            if (result == null)
-            {
-                throw new Exception();
-            }
 
             return result;
         }
@@ -462,11 +403,6 @@ namespace Binance.API.Csharp.Client
 
             var result = await _apiClient.CallAsync<dynamic>(ApiMethod.PUT, EndPoints.KeepAliveUserStream, false, $"listenKey={listenKey}");
 
-            if (result == null)
-            {
-                throw new Exception();
-            }
-
             return result;
         }
 
@@ -483,11 +419,6 @@ namespace Binance.API.Csharp.Client
             }
 
             var result = await _apiClient.CallAsync<dynamic>(ApiMethod.DELETE, EndPoints.CloseUserStream, false, $"listenKey={listenKey}");
-
-            if (result == null)
-            {
-                throw new Exception();
-            }
 
             return result;
         }

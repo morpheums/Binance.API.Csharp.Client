@@ -84,7 +84,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, decimal stopPrice = 0m, decimal icebergQty = 0m, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000);
+        Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000);
 
         /// <summary>
         /// Test new order creation and signature/recvWindow long. Creates and validates a new order but does not send it into the matching engine.
@@ -97,7 +97,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, decimal stopPrice = 0m, decimal icebergQty = 0m, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000);
+        Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000);
 
         /// <summary>
         /// Check an order's status.

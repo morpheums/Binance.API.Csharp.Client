@@ -35,29 +35,22 @@ namespace Binance.API.Csharp.Client
         /// <returns></returns>
         public async Task<T> CallAsync<T>(ApiMethod method, string endpoint, bool isSigned = false, string parameters = null)
         {
-            try
+            var finalEndpoint = endpoint + (string.IsNullOrWhiteSpace(parameters) ? "" : $"?{parameters}");
+
+            if (isSigned)
             {
-                var finalEndpoint = endpoint + (string.IsNullOrWhiteSpace(parameters) ? "" : $"?{parameters}");
-
-                if (isSigned)
-                {
-                    parameters += (!string.IsNullOrWhiteSpace(parameters) ? "&timestamp=" : "timestamp=") + Utilities.GenerateTimeStamp();
-                    var signature = Utilities.GenerateSignature(_apiSecret, parameters);
-                    finalEndpoint = $"{endpoint}?{parameters}&signature={signature}";
-                }
-
-                var request = new HttpRequestMessage(Utilities.CreateHttpMethod(method.ToString()), finalEndpoint);
-
-                var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-                response.EnsureSuccessStatusCode();
-
-                var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                return JsonConvert.DeserializeObject<T>(result);
+                parameters += (!string.IsNullOrWhiteSpace(parameters) ? "&timestamp=" : "timestamp=") + Utilities.GenerateTimeStamp();
+                var signature = Utilities.GenerateSignature(_apiSecret, parameters);
+                finalEndpoint = $"{endpoint}?{parameters}&signature={signature}";
             }
-            catch (Exception)
-            {
-                return default(T);
-            }
+
+            var request = new HttpRequestMessage(Utilities.CreateHttpMethod(method.ToString()), finalEndpoint);
+
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<T>(result);
         }
 
         /// <summary>

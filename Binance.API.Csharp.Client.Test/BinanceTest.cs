@@ -2,6 +2,7 @@
 using Binance.API.Csharp.Client.Models.Enums;
 using System.Threading;
 using Binance.API.Csharp.Client.Models.WebSocket;
+using System.Linq;
 
 namespace Binance.API.Csharp.Client.Test
 {
@@ -71,24 +72,11 @@ namespace Binance.API.Csharp.Client.Test
             var sellOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.04m, OrderSide.SELL).Result;
         }
 
-
         [TestMethod]
         public void PostMarketOrder()
         {
-            var buyMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.32m, 0m, OrderSide.BUY, OrderType.MARKET).Result;
-            var sellMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.1m, 0m, OrderSide.SELL, OrderType.MARKET).Result;
-        }
-
-        [TestMethod]
-        public void PostStopOrder()
-        {
-            var stopOrder = binanceClient.PostNewOrder("ethbtc", 0.5m, 0.01m, OrderSide.BUY, stopPrice: 0.5m).Result;
-        }
-
-        [TestMethod]
-        public void PostIcebergOrder()
-        {
-            var icebergOrder = binanceClient.PostNewOrder("ethbtc", 2m, 0.01m, OrderSide.BUY, icebergQty: 5m).Result;
+            var buyMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.01m, 0m, OrderSide.BUY, OrderType.MARKET).Result;
+            var sellMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.01m, 0m, OrderSide.SELL, OrderType.MARKET).Result;
         }
 
         [TestMethod]
