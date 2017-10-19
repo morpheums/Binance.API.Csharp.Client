@@ -28,6 +28,10 @@
         public static readonly string AllOrders = "/api/v3/allOrders";
         public static readonly string AccountInformation = "/api/v3/account";
         public static readonly string TradeList = "/api/v3/myTrades";
+
+        public static readonly string Withdraw = "/wapi/v1/withdraw.html";
+        public static readonly string DepositHistory = "/wapi/v1/getDepositHistory.html";
+        public static readonly string WithdrawHistory = "/wapi/v1/getWithdrawHistory.html";
         #endregion
 
         #region User Stream Endpoints

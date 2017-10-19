@@ -9,7 +9,7 @@ namespace Binance.API.Csharp.Client.Test
     [TestClass]
     public class BinanceTest
     {
-        private static ApiClient apiClient = new ApiClient("@YourApiKey", "YourApiSecret");
+        private static ApiClient apiClient = new ApiClient("@Key", "@Secret");
         private static BinanceClient binanceClient = new BinanceClient(apiClient);
 
         #region General

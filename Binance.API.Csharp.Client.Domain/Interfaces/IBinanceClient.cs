@@ -151,6 +151,31 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
         Task<IEnumerable<Trade>> GetTradeList(string symbol, long recvWindow = 6000000);
+
+        ///// <summary>
+        ///// Get all account orders; active, canceled, or filled.
+        ///// </summary>
+        ///// <param name="symbol">Ticker symbol.</param>
+        ///// <param name="orderId">If is set, it will get orders >= that orderId. Otherwise most recent orders are returned.</param>
+        ///// <param name="limit">Limit of records to retrieve.</param>
+        ///// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
+        ///// <returns></returns>
+        //Task<IEnumerable<Order>> GetAllOrders(string symbol, long? orderId = null, int limit = 500, long recvWindow = 6000000);
+
+        ///// <summary>
+        ///// Get current account information.
+        ///// </summary>
+        ///// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
+        ///// <returns></returns>
+        //Task<AccountInfo> GetAccountInfo(long recvWindow = 6000000);
+
+        ///// <summary>
+        ///// Get trades for a specific account and symbol.
+        ///// </summary>
+        ///// <param name="symbol">Ticker symbol.</param>
+        ///// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
+        ///// <returns></returns>
+        //Task<IEnumerable<Trade>> GetTradeList(string symbol, long recvWindow = 6000000);
         #endregion
 
         #region User Stream 
