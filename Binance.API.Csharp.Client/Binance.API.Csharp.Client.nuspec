@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Binance.API.Csharp.Client</id>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <title>Binance.API.Csharp.Client</title>
     <authors>Jose Mejia</authors>
     <owners>Jose Mejia</owners>
@@ -10,7 +10,7 @@
     <iconUrl>https://github.com/morpheums/Binance.API.Csharp.Client/blob/master/Binance.API.Csharp.Client/BinanceLogo.png?raw=true</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>C#.NET client for Binance Exchange API.</description>
-    <releaseNotes>Fixing bug when posting an order. Fixing Websocketsharp dependency.</releaseNotes>
+    <releaseNotes>Fixing bug when posting a market order. Added Binance trading rules validations.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>Criptocurrency Binance API dotnet csharp wrapper</tags>
     <dependencies>
