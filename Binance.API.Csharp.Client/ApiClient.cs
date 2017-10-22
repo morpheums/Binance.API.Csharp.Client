@@ -20,7 +20,7 @@ namespace Binance.API.Csharp.Client
         /// <param name="apiKey">Key used to authenticate within the API.</param>
         /// <param name="apiSecret">API secret used to signed API calls.</param>
         /// <param name="apiUrl">API base url.</param>
-        public ApiClient(string apiKey, string apiSecret, string apiUrl = @"https://www.binance.com", string webSocketEndpoint = @"wss://stream.binance.com:9443/ws/") : base(apiKey, apiSecret, apiUrl, webSocketEndpoint)
+        public ApiClient(string apiKey, string apiSecret, string apiUrl = @"https://www.binance.com", string webSocketEndpoint = @"wss://stream.binance.com:9443/ws/", bool addDefaultHeaders = true) : base(apiKey, apiSecret, apiUrl, webSocketEndpoint, addDefaultHeaders)
         {
         }
 
@@ -39,7 +39,7 @@ namespace Binance.API.Csharp.Client
 
             if (isSigned)
             {
-                parameters += (!string.IsNullOrWhiteSpace(parameters) ? "&timestamp=" : "timestamp=") + Utilities.GenerateTimeStamp();
+                parameters += (!string.IsNullOrWhiteSpace(parameters) ? "&timestamp=" : "timestamp=") + Utilities.GenerateTimeStamp(DateTime.Now);
                 var signature = Utilities.GenerateSignature(_apiSecret, parameters);
                 finalEndpoint = $"{endpoint}?{parameters}&signature={signature}";
             }

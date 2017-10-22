@@ -52,7 +52,6 @@
     <Compile Include="ApiClient.cs" />
     <Compile Include="BinanceClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\TradingRules.cs" />
     <Compile Include="Utils\EndPoints.cs" />
     <Compile Include="Utils\CustomParser.cs" />
     <Compile Include="Utils\ExtensionMethods.cs" />

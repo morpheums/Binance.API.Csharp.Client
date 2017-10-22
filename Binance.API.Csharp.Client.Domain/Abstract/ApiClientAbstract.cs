@@ -11,7 +11,7 @@ namespace Binance.API.Csharp.Client.Domain.Abstract
         /// Secret used to authenticate within the API.
         /// </summary>
         public readonly string _apiUrl = "";
-        
+
         /// <summary>
         /// Key used to authenticate within the API.
         /// </summary>
@@ -50,7 +50,7 @@ namespace Binance.API.Csharp.Client.Domain.Abstract
         /// <param name="apiKey">Key used to authenticate within the API.</param>
         /// <param name="apiSecret">API secret used to signed API calls.</param>
         /// <param name="apiUrl">API based url.</param>
-        public ApiClientAbstract(string apiKey, string apiSecret, string apiUrl = @"https://www.binance.com", string webSocketEndpoint = @"wss://stream.binance.com:9443/ws/")
+        public ApiClientAbstract(string apiKey, string apiSecret, string apiUrl = @"https://www.binance.com", string webSocketEndpoint = @"wss://stream.binance.com:9443/ws/", bool addDefaultHeaders = true)
         {
             _apiUrl = apiUrl;
             _apiKey = apiKey;
@@ -61,13 +61,18 @@ namespace Binance.API.Csharp.Client.Domain.Abstract
             {
                 BaseAddress = new Uri(_apiUrl)
             };
-            ConfigureHttpClient();
+
+            if (addDefaultHeaders)
+            {
+                ConfigureHttpClient();
+            }
         }
 
         /// <summary>
         /// Configures the HTTPClient.
         /// </summary>
-        private void ConfigureHttpClient() {
+        private void ConfigureHttpClient()
+        {
             _httpClient.DefaultRequestHeaders
                  .Add("X-MBX-APIKEY", _apiKey);
 

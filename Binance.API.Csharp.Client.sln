@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binance.API.Csharp.Client.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binance.API.Csharp.Client.Test", "Binance.API.Csharp.Client.Test\Binance.API.Csharp.Client.Test.csproj", "{6F565960-4CB7-4292-9B46-17EF0E70EBBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binance.API.Csharp.Client.Tester", "Binance.API.Csharp.Client.Tester\Binance.API.Csharp.Client.Tester.csproj", "{A137EBBC-91D4-4AC1-ABE0-4362A3C25011}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{6F565960-4CB7-4292-9B46-17EF0E70EBBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F565960-4CB7-4292-9B46-17EF0E70EBBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F565960-4CB7-4292-9B46-17EF0E70EBBF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A137EBBC-91D4-4AC1-ABE0-4362A3C25011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A137EBBC-91D4-4AC1-ABE0-4362A3C25011}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A137EBBC-91D4-4AC1-ABE0-4362A3C25011}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A137EBBC-91D4-4AC1-ABE0-4362A3C25011}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

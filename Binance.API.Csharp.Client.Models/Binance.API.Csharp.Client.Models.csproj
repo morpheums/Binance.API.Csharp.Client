@@ -44,15 +44,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\DepositHistory.cs" />
     <Compile Include="Account\Trade.cs" />
     <Compile Include="Account\CanceledOrder.cs" />
     <Compile Include="Account\NewOrder.cs" />
     <Compile Include="Account\Order.cs" />
+    <Compile Include="Account\WithdrawHistory.cs" />
+    <Compile Include="Account\WithdrawResponse.cs" />
     <Compile Include="Enums\ApiMethods.cs" />
+    <Compile Include="Enums\DepositStatus.cs" />
     <Compile Include="Enums\OrderSide.cs" />
     <Compile Include="Enums\OrderType.cs" />
     <Compile Include="Enums\TimeInForce.cs" />
     <Compile Include="Enums\TimeInterval.cs" />
+    <Compile Include="Enums\WithdrawStatus.cs" />
     <Compile Include="General\ServerInfo.cs" />
     <Compile Include="Account\AccountInfo.cs" />
     <Compile Include="Market\AggregateTrade.cs" />
@@ -62,6 +67,10 @@
     <Compile Include="Market\OrderBookTicker.cs" />
     <Compile Include="Market\PriceChangeInfo.cs" />
     <Compile Include="Market\SymbolPrice.cs" />
+    <Compile Include="Market\TradingRules\Filter.cs" />
+    <Compile Include="Market\TradingRules\RateLimit.cs" />
+    <Compile Include="Market\TradingRules\Symbol.cs" />
+    <Compile Include="Market\TradingRules\TradingRules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserStream\UserStreamInfo.cs" />
     <Compile Include="WebSocket\AccountUpdatedMessage.cs" />
