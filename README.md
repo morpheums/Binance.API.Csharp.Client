@@ -1,6 +1,6 @@
 # Binance API Csharp Client ![Icon](https://github.com/morpheums/Binance.API.Csharp.Client/blob/master/Binance.API.Csharp.Client/BinanceLogo.png?raw=true)
 ### C#.NET client for Binance Exchange API.
-[![NuGet](https://img.shields.io/badge/nuget-v1.1.0-blue.svg?style=plastic)](https://www.nuget.org/packages/Binance.API.Csharp.Client)
+[![NuGet](https://img.shields.io/nuget/v/Binance.API.Csharp.Client.svg?style=plastic)](https://www.nuget.org/packages/Binance.API.Csharp.Client)
 [![NuGet](https://img.shields.io/nuget/dt/Binance.API.Csharp.Client.svg?style=plastic)](https://www.nuget.org/packages/Binance.API.Csharp.Client)
 
 ## Features
