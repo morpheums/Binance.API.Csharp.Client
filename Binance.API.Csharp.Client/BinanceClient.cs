@@ -4,6 +4,7 @@ using Binance.API.Csharp.Client.Models.Account;
 using Binance.API.Csharp.Client.Models.Enums;
 using Binance.API.Csharp.Client.Models.General;
 using Binance.API.Csharp.Client.Models.Market;
+using Binance.API.Csharp.Client.Models.Market.TradingRules;
 using Binance.API.Csharp.Client.Models.UserStream;
 using Binance.API.Csharp.Client.Models.WebSocket;
 using Binance.API.Csharp.Client.Utils;
@@ -16,14 +17,13 @@ namespace Binance.API.Csharp.Client
 {
     public class BinanceClient : BinanceClientAbstract, IBinanceClient
     {
-        private TradingRules _tradingRules = null;
         /// <summary>
         /// ctor.
         /// </summary>
         /// <param name="apiClient">API client to be used for API calls.</param>
         public BinanceClient(IApiClient apiClient) : base(apiClient)
         {
-            _tradingRules = new TradingRules();
+            LoadTradingRules();
         }
 
         #region Private Methods
@@ -31,31 +31,63 @@ namespace Binance.API.Csharp.Client
         /// Validates that a new order is valid before posting it.
         /// </summary>
         /// <param name="orderType">Order type (LIMIT-MARKET).</param>
-        /// <param name="tickerInfo">Object with the information of the ticker.</param>
+        /// <param name="symbolInfo">Object with the information of the ticker.</param>
         /// <param name="unitPrice">Price of the transaction.</param>
         /// <param name="quantity">Quantity to transaction.</param>
         /// <param name="stopPrice">Price for stop orders.</param>
-        private void ValidateOrderValue(OrderType orderType, TickerInfo tickerInfo, decimal unitPrice, decimal quantity)
+        private void ValidateOrderValue(string symbol, OrderType orderType, decimal unitPrice, decimal quantity, decimal icebergQty)
         {
-            if (tickerInfo == null)
+            // Validating parameters values.
+            if (string.IsNullOrWhiteSpace(symbol))
             {
                 throw new ArgumentException("Invalid symbol. ", "symbol");
             }
             if (quantity <= 0m)
             {
-                throw new ArgumentException("quantity must be greater than zero.", "quantity");
+                throw new ArgumentException("Quantity must be greater than zero.", "quantity");
             }
             if (orderType == OrderType.LIMIT)
             {
                 if (unitPrice <= 0m)
                 {
-                    throw new ArgumentException("price must be greater than zero.", "price");
-                }
-                if ((unitPrice * quantity) < tickerInfo.MinOrderPrice)
-                {
-                    throw new Exception($"Order value for this symbol is lower than allowed! Order value for this symbol must be greater than: {tickerInfo.MinOrderPrice}.");
+                    throw new ArgumentException("Price must be greater than zero.", "price");
                 }
             }
+
+            // Validating Trading Rules
+            if (_tradingRules != null)
+            {
+                var symbolInfo = _tradingRules.Symbols.Where(r => r.SymbolName.ToUpper() == symbol.ToUpper()).FirstOrDefault();
+                var priceFilter = symbolInfo.Filters.Where(r => r.FilterType == "PRICE_FILTER").FirstOrDefault();
+                var sizeFilter = symbolInfo.Filters.Where(r => r.FilterType == "LOT_SIZE").FirstOrDefault();
+
+                if (symbolInfo == null)
+                {
+                    throw new ArgumentException("Invalid symbol. ", "symbol");
+                }
+                if (quantity < sizeFilter.MinQty)
+                {
+                    throw new ArgumentException($"Quantity for this symbol is lower than allowed! Quantity must be greater than: {sizeFilter.MinQty}", "quantity");
+                }
+                if (icebergQty > 0m && !symbolInfo.IcebergAllowed)
+                {
+                    throw new Exception($"Iceberg orders not allowed for this symbol.");
+                }
+
+                if (orderType == OrderType.LIMIT)
+                {
+                    if (unitPrice < priceFilter.MinPrice)
+                    {
+                        throw new ArgumentException($"Price for this symbol is lower than allowed! Price must be greater than: {priceFilter.MinPrice}", "price");
+                    }
+                }
+            }
+        }
+
+        private void LoadTradingRules()
+        {
+            var apiClient = new ApiClient("", "", EndPoints.TradingRules, addDefaultHeaders: false);
+            _tradingRules = apiClient.CallAsync<TradingRules>(ApiMethod.GET, "").Result;
         }
         #endregion
 
@@ -195,16 +227,15 @@ namespace Binance.API.Csharp.Client
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
+        public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, decimal icebergQty = 0m, long recvWindow = 6000000)
         {
-            var tickerInfo = _tradingRules.TickersInfo.Where(r => r.Ticker == symbol.ToUpper()).FirstOrDefault();
-
             //Validates that the order is valid.
-            ValidateOrderValue(orderType, tickerInfo, price, quantity);
+            ValidateOrderValue(symbol, orderType, price, quantity, icebergQty);
 
             var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&quantity={quantity}"
                 + (orderType == OrderType.LIMIT ? $"&timeInForce={timeInForce}" : "")
                 + (orderType == OrderType.LIMIT ? $"&price={price}" : "")
+                + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "")
                 + $"&recvWindow={recvWindow}";
             var result = await _apiClient.CallAsync<NewOrder>(ApiMethod.POST, EndPoints.NewOrder, true, args);
 
@@ -222,16 +253,15 @@ namespace Binance.API.Csharp.Client
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
+        public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, decimal icebergQty = 0m, long recvWindow = 6000000)
         {
-            var tickerInfo = _tradingRules.TickersInfo.Where(r => r.Ticker == symbol.ToUpper()).FirstOrDefault();
-
             //Validates that the order is valid.
-            ValidateOrderValue(orderType, tickerInfo, price, quantity);
+            ValidateOrderValue(symbol, orderType, price, quantity, icebergQty);
 
             var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&quantity={quantity}"
                 + (orderType == OrderType.LIMIT ? $"&timeInForce={timeInForce}" : "")
                 + (orderType == OrderType.LIMIT ? $"&price={price}" : "")
+                + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "")
                 + $"&recvWindow={recvWindow}";
             var result = await _apiClient.CallAsync<dynamic>(ApiMethod.POST, EndPoints.NewOrderTest, true, args);
 
@@ -375,6 +405,93 @@ namespace Binance.API.Csharp.Client
 
             return result;
         }
+
+        /// <summary>
+        /// Submit a withdraw request.
+        /// </summary>
+        /// <param name="asset">Asset to withdraw.</param>
+        /// <param name="amount">Amount to withdraw.</param>
+        /// <param name="address">Address where the asset will be deposited.</param>
+        /// <param name="addressName">Address name.</param>
+        /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
+        /// <returns></returns>
+        public async Task<WithdrawResponse> Withdraw(string asset, decimal amount, string address, string addressName = "", long recvWindow = 6000000)
+        {
+            if (string.IsNullOrWhiteSpace(asset))
+            {
+                throw new ArgumentException("asset cannot be empty. ", "asset");
+            }
+            if (amount <= 0m)
+            {
+                throw new ArgumentException("amount must be greater than zero.", "amount");
+            }
+            if (string.IsNullOrWhiteSpace(address))
+            {
+                throw new ArgumentException("address cannot be empty. ", "address");
+            }
+
+            var args = $"asset={asset.ToUpper()}&amount={amount}&address={address}"
+              + (!string.IsNullOrWhiteSpace(addressName) ? $"&name={addressName}" : "")
+              + $"&recvWindow={recvWindow}";
+
+            var result = await _apiClient.CallAsync<WithdrawResponse>(ApiMethod.POST, EndPoints.Withdraw, true, args);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Fetch deposit history.
+        /// </summary>
+        /// <param name="asset">Asset you want to see the information for.</param>
+        /// <param name="status">Deposit status.</param>
+        /// <param name="startTime">Start time. </param>
+        /// <param name="endTime">End time.</param>
+        /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
+        /// <returns></returns>
+        public async Task<DepositHistory> GetDepositHistory(string asset, DepositStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, long recvWindow = 6000000)
+        {
+            if (string.IsNullOrWhiteSpace(asset))
+            {
+                throw new ArgumentException("asset cannot be empty. ", "asset");
+            }
+
+            var args = $"asset={asset.ToUpper()}"
+              + (status.HasValue ? $"&status={(int)status}" : "")
+              + (startTime.HasValue ? $"&startTime={Utilities.GenerateTimeStamp(startTime.Value)}" : "")
+              + (endTime.HasValue ? $"&endTime={Utilities.GenerateTimeStamp(endTime.Value)}" : "")
+              + $"&recvWindow={recvWindow}";
+
+            var result = await _apiClient.CallAsync<DepositHistory>(ApiMethod.POST, EndPoints.DepositHistory, true, args);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Fetch withdraw history.
+        /// </summary>
+        /// <param name="asset">Asset you want to see the information for.</param>
+        /// <param name="status">Withdraw status.</param>
+        /// <param name="startTime">Start time. </param>
+        /// <param name="endTime">End time.</param>
+        /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
+        /// <returns></returns>
+        public async Task<WithdrawHistory> GetWithdrawHistory(string asset, WithdrawStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, long recvWindow = 6000000)
+        {
+            if (string.IsNullOrWhiteSpace(asset))
+            {
+                throw new ArgumentException("asset cannot be empty. ", "asset");
+            }
+
+            var args = $"asset={asset.ToUpper()}"
+              + (status.HasValue ? $"&status={(int)status}" : "")
+              + (startTime.HasValue ? $"&startTime={Utilities.GenerateTimeStamp(startTime.Value)}" : "")
+              + (endTime.HasValue ? $"&endTime={Utilities.GenerateTimeStamp(endTime.Value)}" : "")
+              + $"&recvWindow={recvWindow}";
+
+            var result = await _apiClient.CallAsync<WithdrawHistory>(ApiMethod.POST, EndPoints.WithdrawHistory, true, args);
+
+            return result;
+        }
         #endregion
 
         #region User Stream
@@ -489,6 +606,7 @@ namespace Binance.API.Csharp.Client
 
             return listenKey;
         }
+
         #endregion
     }
 }

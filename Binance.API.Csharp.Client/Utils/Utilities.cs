@@ -33,9 +33,10 @@ namespace Binance.API.Csharp.Client.Utils
         /// Gets a timestamp in milliseconds.
         /// </summary>
         /// <returns>Timestamp in milliseconds.</returns>
-        public static string GenerateTimeStamp()
+        public static string GenerateTimeStamp(DateTime baseDateTime)
         {
-            return DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
+            var dtOffset = new DateTimeOffset(baseDateTime);
+            return dtOffset.ToUnixTimeMilliseconds().ToString();
         }
 
         /// <summary>

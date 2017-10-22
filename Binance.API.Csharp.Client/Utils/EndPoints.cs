@@ -17,6 +17,7 @@
         public static readonly string TickerPriceChange24H = "/api/v1/ticker/24hr";
         public static readonly string AllPrices = "/api/v1/ticker/allPrices";
         public static readonly string OrderBookTicker = "/api/v1/ticker/allBookTickers";
+        public static readonly string TradingRules = "https://gist.githubusercontent.com/Ninj0r/3029b9d635f8f81f5ffab9cc9df5cc61/raw/810530a2118e5d8cdcfcc4d220349976a0acf131/tradingRules_20171022.json";
         #endregion
 
         #region Account Endpoints
@@ -28,6 +29,10 @@
         public static readonly string AllOrders = "/api/v3/allOrders";
         public static readonly string AccountInformation = "/api/v3/account";
         public static readonly string TradeList = "/api/v3/myTrades";
+
+        public static readonly string Withdraw = "/wapi/v1/withdraw.html";
+        public static readonly string DepositHistory = "/wapi/v1/getDepositHistory.html";
+        public static readonly string WithdrawHistory = "/wapi/v1/getWithdrawHistory.html";
         #endregion
 
         #region User Stream Endpoints

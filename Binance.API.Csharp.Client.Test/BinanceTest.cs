@@ -2,14 +2,13 @@
 using Binance.API.Csharp.Client.Models.Enums;
 using System.Threading;
 using Binance.API.Csharp.Client.Models.WebSocket;
-using System.Linq;
 
 namespace Binance.API.Csharp.Client.Test
 {
     [TestClass]
     public class BinanceTest
     {
-        private static ApiClient apiClient = new ApiClient("@YourApiKey", "YourApiSecret");
+        private static ApiClient apiClient = new ApiClient("@YourApiKey", "@YourApiSecret");
         private static BinanceClient binanceClient = new BinanceClient(apiClient);
 
         #region General
@@ -68,8 +67,8 @@ namespace Binance.API.Csharp.Client.Test
         [TestMethod]
         public void PostLimitOrder()
         {
-            var buyOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.045m, OrderSide.BUY).Result;
-            var sellOrder = binanceClient.PostNewOrder("ethbtc", 1m, 0.04m, OrderSide.SELL).Result;
+            var buyOrder = binanceClient.PostNewOrder("KNCETH", 100m, 0.005m, OrderSide.BUY).Result;
+            var sellOrder = binanceClient.PostNewOrder("KNCETH", 1000m, 1m, OrderSide.SELL).Result;
         }
 
         [TestMethod]
@@ -77,6 +76,12 @@ namespace Binance.API.Csharp.Client.Test
         {
             var buyMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.01m, 0m, OrderSide.BUY, OrderType.MARKET).Result;
             var sellMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.01m, 0m, OrderSide.SELL, OrderType.MARKET).Result;
+        }
+
+        [TestMethod]
+        public void PostIcebergOrder()
+        {
+            var icebergOrder = binanceClient.PostNewOrder("ethbtc", 0.01m, 0m, OrderSide.BUY, OrderType.MARKET, icebergQty: 2m).Result;
         }
 
         [TestMethod]
@@ -121,6 +126,23 @@ namespace Binance.API.Csharp.Client.Test
             var tradeList = binanceClient.GetTradeList("ethbtc").Result;
         }
 
+        [TestMethod]
+        public void Withdraw()
+        {
+            var withdrawResult = binanceClient.Withdraw("AST", 100m, "@YourDepositAddress").Result;
+        }
+
+        [TestMethod]
+        public void GetDepositHistory()
+        {
+            var depositHistory = binanceClient.GetDepositHistory("neo", DepositStatus.Success).Result;
+        }
+
+        [TestMethod]
+        public void GetWithdrawHistory()
+        {
+            var withdrawHistory = binanceClient.GetWithdrawHistory("neo").Result;
+        }
         #endregion
 
         #region User stream

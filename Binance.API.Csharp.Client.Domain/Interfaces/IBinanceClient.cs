@@ -4,6 +4,7 @@ using Binance.API.Csharp.Client.Models.General;
 using Binance.API.Csharp.Client.Models.Market;
 using Binance.API.Csharp.Client.Models.UserStream;
 using Binance.API.Csharp.Client.Models.WebSocket;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static Binance.API.Csharp.Client.Domain.Abstract.ApiClientAbstract;
@@ -84,7 +85,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000);
+        Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, decimal icebergQty = 0m, long recvWindow = 6000000);
 
         /// <summary>
         /// Test new order creation and signature/recvWindow long. Creates and validates a new order but does not send it into the matching engine.
@@ -97,7 +98,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000);
+        Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, decimal icebergQty = 0m, long recvWindow = 6000000);
 
         /// <summary>
         /// Check an order's status.
@@ -151,6 +152,39 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
         Task<IEnumerable<Trade>> GetTradeList(string symbol, long recvWindow = 6000000);
+
+        /// <summary>
+        /// Submit a withdraw request.
+        /// </summary>
+        /// <param name="asset">Asset to withdraw.</param>
+        /// <param name="amount">Amount to withdraw.</param>
+        /// <param name="address">Address where the asset will be deposited.</param>
+        /// <param name="addressName">Address name.</param>
+        /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
+        /// <returns></returns>
+        Task<WithdrawResponse> Withdraw(string asset, decimal amount, string address, string addressName = "", long recvWindow = 6000000);
+
+        /// <summary>
+        /// Fetch deposit history.
+        /// </summary>
+        /// <param name="asset">Asset you want to see the information for.</param>
+        /// <param name="status">Deposit status.</param>
+        /// <param name="startTime">Start time. </param>
+        /// <param name="endTime">End time.</param>
+        /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
+        /// <returns></returns>
+        Task<DepositHistory> GetDepositHistory(string asset, DepositStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, long recvWindow = 6000000);
+
+        /// <summary>
+        /// Fetch withdraw history.
+        /// </summary>
+        /// <param name="asset">Asset you want to see the information for.</param>
+        /// <param name="status">Withdraw status.</param>
+        /// <param name="startTime">Start time. </param>
+        /// <param name="endTime">End time.</param>
+        /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
+        /// <returns></returns>
+        Task<WithdrawHistory> GetWithdrawHistory(string asset, WithdrawStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, long recvWindow = 6000000);
         #endregion
 
         #region User Stream 
