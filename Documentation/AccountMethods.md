@@ -1,7 +1,7 @@
-## Account Methods
-### Post new order
+# Account Methods
+## Post new order
 Send in a new order
-#### Examples:
+### Examples:
 
 Post new order (LIMIT)
 ```c#
@@ -17,137 +17,137 @@ Post new iceberg order
 ```c#
     var icebergOrder = binanceClient.PostNewOrder("ethbtc", 0.01m, 0m, OrderSide.BUY, OrderType.MARKET, icebergQty: 2m).Result;
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderType orderType, OrderSide side, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
 ```
 
-### Post test order 
+## Post test order 
 Test new order creation and signature/recvWindow long. Creates and validates a new order but does not send it into the matching engine.
-#### Example:
+### Example:
  
 ```c#
     var testOrder = binanceClient.PostNewOrderTest("ethbtc", 1m, 0.1m, OrderType.LIMIT, OrderSide.BUY).Result;
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderType orderType, OrderSide side, TimeInForce timeInForce = TimeInForce.GTC, long recvWindow = 6000000)
 ```
 
-### Get order
+## Get order
 Check an order's status.
-#### Example:
+### Example:
  
 ```c#
     var order = binanceClient.GetOrder("ethbtc", 8982811).Result;
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public async Task<Order> GetOrder(string symbol, long? orderId = null, string origClientOrderId = null, long recvWindow = 6000000)
 ```
 
- ### Cancel order 
+## Cancel order 
 Cancel an active order.
-#### Example:
+### Example:
  
 ```c#
     var canceledOrder = binanceClient.CancelOrder("ethbtc", 9137796).Result;
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public async Task<CanceledOrder> CancelOrder(string symbol, long? orderId = null, string origClientOrderId = null, long recvWindow = 6000000)
 ```
 
-### Get current open orders
+## Get current open orders
 Get all open orders on a symbol.
-#### Example:
+### Example:
  
 ```c#
     var openOrders = binanceClient.GetCurrentOpenOrders("ethbtc").Result;
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public async Task<IEnumerable<Order>> GetCurrentOpenOrders(string symbol, long recvWindow = 6000000)
 ```
 
-### Get all orders
+## Get all orders
 Get all account orders; active, canceled, or filled.
-#### Example:
+### Example:
  
 ```c#
     var allOrders = binanceClient.GetAllOrders("ethbtc").Result;
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public async Task<IEnumerable<Order>> GetAllOrders(string symbol, long? orderId = null, int limit = 500, long recvWindow = 6000000)
 ```
 
-### Get account info
+## Get account info
 Get current account information.
-#### Example:
+### Example:
  
 ```c#
     var accountInfo = binanceClient.GetAccountInfo().Result;
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public async Task<AccountInfo> GetAccountInfo(long recvWindow = 6000000)
 ```
 
-### Get account trade list
+## Get account trade list
 Get trades for a specific account and symbol.
-#### Example:
+### Example:
  
 ```c#
     var tradeList = binanceClient.GetTradeList("ethbtc").Result;
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public async Task<IEnumerable<Trade>> GetTradeList(string symbol, long recvWindow = 6000000)
 ```
 
-### Withdraw
+## Withdraw
 Submit a withdraw request.
-#### Example:
+### Example:
  
 ```c#
      var withdrawResult = binanceClient.Withdraw("eth", 100m, "@YourDepositAddress").Result;
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public async Task<WithdrawResponse> Withdraw(string asset, decimal amount, string address, string addressName = "", long recvWindow = 6000000)
 ```
 
-### Get deposit history
+## Get deposit history
 Fetch deposit history.
-#### Example:
+### Example:
  
 ```c#
      var depositHistory = binanceClient.GetDepositHistory("neo", DepositStatus.Success).Result;
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public async Task<DepositHistory> GetDepositHistory(string asset, DepositStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, long recvWindow = 6000000)
 ```
 
-### Get withdraw history
+## Get withdraw history
 Fetch withdraw history.
-#### Example:
+### Example:
  
 ```c#
      var withdrawHistory = binanceClient.GetWithdrawHistory("neo").Result;
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public async Task<WithdrawHistory> GetWithdrawHistory(string asset, WithdrawStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, long recvWindow = 6000000)

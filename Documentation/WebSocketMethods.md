@@ -1,7 +1,7 @@
-## Websocket Methods
-### Depth messages
+# Websocket Methods
+## Depth messages
 Listen to the Depth endpoint.
-#### Example:
+### Example:
  
 ```c#
     private void DepthHandler(DepthMessage messageData)
@@ -15,15 +15,15 @@ Listen to the Depth endpoint.
         Thread.Sleep(50000);
     }
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public void ListenDepthEndpoint(string symbol, MessageHandler<DepthMessage> depthHandler)
 ```
 
-### KLine messages
+## KLine messages
 Listen to the Kline endpoint.
-#### Example:
+### Example:
  
 ```c#
     private void KlineHandler(KlineMessage messageData)
@@ -37,15 +37,15 @@ Listen to the Kline endpoint.
         Thread.Sleep(50000);
     }
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public void ListenKlineEndpoint(string symbol, TimeInterval interval, MessageHandler<KlineMessage> klineHandler)
 ```
 
-### Trades messages
+## Trades messages
 Listen to the Trades endpoint.
-#### Example:
+### Example:
  
 ```c#
     private void AggregateTradesHandler(AggregateTradeMessage messageData)
@@ -59,15 +59,15 @@ Listen to the Trades endpoint.
         Thread.Sleep(50000);
     }
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public void ListenTradeEndpoint(string symbol, MessageHandler<AggregateTradeMessage> tradeHandler)
 ```
 
-### User Data messages
+## User Data messages
 Listen to the User Data endpoint.
-#### Example:
+### Example:
  
 ```c#
     private void AccountHandler(AccountUpdatedMessage messageData)
@@ -91,7 +91,7 @@ Listen to the User Data endpoint.
         Thread.Sleep(50000);
     }
 ```
-#### Method Signature:
+### Method Signature:
 
 ```c#
     public string ListenUserDataEndpoint(MessageHandler<AccountUpdatedMessage> accountInfoHandler, MessageHandler<OrderOrTradeUpdatedMessage> tradesHandler, MessageHandler<OrderOrTradeUpdatedMessage> ordersHandler)
