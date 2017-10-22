@@ -1,6 +1,6 @@
 # Binance API Csharp Client ![Icon](https://github.com/morpheums/Binance.API.Csharp.Client/blob/master/Binance.API.Csharp.Client/BinanceLogo.png?raw=true)
 ### C#.NET client for Binance Exchange API.
-[![NuGet](https://img.shields.io/badge/nuget-v1.0.4-blue.svg?style=plastic)](https://www.nuget.org/packages/Binance.API.Csharp.Client)
+[![NuGet](https://img.shields.io/badge/nuget-v1.1.0-blue.svg?style=plastic)](https://www.nuget.org/packages/Binance.API.Csharp.Client)
 
 ## Features
 - Complete implementation of the Binance API.
@@ -189,6 +189,10 @@ Post new order (MARKET)
     var buyMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.01m, 0m, OrderSide.BUY, OrderType.MARKET).Result;
     var sellMarketOrder = binanceClient.PostNewOrder("ethbtc", 0.01m, 0m, OrderSide.SELL, OrderType.MARKET).Result;
 ```
+Post new iceberg order
+```c#
+    var icebergOrder = binanceClient.PostNewOrder("ethbtc", 0.01m, 0m, OrderSide.BUY, OrderType.MARKET, icebergQty: 2m).Result;
+```
 </details>
 <details>
  <summary>Method Signature</summary>
@@ -314,6 +318,57 @@ Get trades for a specific account and symbol.
 
 ```c#
     public async Task<IEnumerable<Trade>> GetTradeList(string symbol, long recvWindow = 6000000)
+```
+</details>
+
+### Withdraw
+Submit a withdraw request.
+<details>
+ <summary>Example</summary>
+ 
+```c#
+     var withdrawResult = binanceClient.Withdraw("eth", 100m, "@YourDepositAddress").Result;
+```
+</details>
+<details>
+ <summary>Method Signature</summary>
+
+```c#
+    public async Task<WithdrawResponse> Withdraw(string asset, decimal amount, string address, string addressName = "", long recvWindow = 6000000)
+```
+</details>
+
+### Get deposit history
+Fetch deposit history.
+<details>
+ <summary>Example</summary>
+ 
+```c#
+     var depositHistory = binanceClient.GetDepositHistory("neo", DepositStatus.Success).Result;
+```
+</details>
+<details>
+ <summary>Method Signature</summary>
+
+```c#
+    public async Task<DepositHistory> GetDepositHistory(string asset, DepositStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, long recvWindow = 6000000)
+```
+</details>
+
+### Get withdraw history
+Fetch withdraw history.
+<details>
+ <summary>Example</summary>
+ 
+```c#
+     var withdrawHistory = binanceClient.GetWithdrawHistory("neo").Result;
+```
+</details>
+<details>
+ <summary>Method Signature</summary>
+
+```c#
+    public async Task<WithdrawHistory> GetWithdrawHistory(string asset, WithdrawStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, long recvWindow = 6000000)
 ```
 </details>
 
