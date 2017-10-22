@@ -543,5 +543,7 @@ Listen to the User Data endpoint.
 
 
 ## License
-
 Binance.API.Csharp.Client is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
+## Code of Conduct
+Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md).
