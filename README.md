@@ -9,7 +9,7 @@
 - **Complete implementation** of the Binance API and WebSockets.
 - Validates transactions using the **[Binance Trading Rules](https://support.binance.com/hc/en-us/articles/115000594711-Trading-Rule)**
 - API results **deserialized** to concrete objects for ease of usage.
-- Includes a ready to go test project with all possible API calls, just provide your API Key and Secret.
+- Includes a **ready to go** test project with **all possible API calls**, just provide your API Key and Secret.
 
 ## Installation
 
