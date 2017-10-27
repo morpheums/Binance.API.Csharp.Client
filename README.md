@@ -22,7 +22,7 @@ PM> Install-Package Binance.API.Csharp.Client
 dotnet add package Binance.API.Csharp.Client
 ```
 ## Getting Started
-In order to use signed methods you need a [Binance account](https://www.binance.com/register.html?ref=10200312), if you already have one, go to your account and create a new API private key.
+In order to use signed methods you need to [create a Binance account](https://www.binance.com/register.html?ref=10200312), if you already have one, go to your account and create a new API private key.
 
 Create an instance of the **APIClient** which receive the following parameters:
 
