@@ -21,9 +21,12 @@ namespace Binance.API.Csharp.Client
         /// ctor.
         /// </summary>
         /// <param name="apiClient">API client to be used for API calls.</param>
-        public BinanceClient(IApiClient apiClient) : base(apiClient)
+        public BinanceClient(IApiClient apiClient, bool loadTradingRules = true) : base(apiClient)
         {
-            LoadTradingRules();
+            if(loadTradingRules)
+            {
+                LoadTradingRules();
+            }
         }
 
         #region Private Methods
