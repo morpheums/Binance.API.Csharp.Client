@@ -22,9 +22,9 @@ namespace Binance.API.Csharp.Client
         /// </summary>
         /// <param name="apiClient">API client to be used for API calls.</param>
         /// <param name="loadTradingRules">Optional parameter to skip loading trading rules.</param>
-        public BinanceClient(IApiClient apiClient, bool loadTradingRules = true) : base(apiClient)
+        public BinanceClient(IApiClient apiClient, bool loadTradingRules = false) : base(apiClient)
         {
-            if(loadTradingRules)
+            if (loadTradingRules)
             {
                 LoadTradingRules();
             }
@@ -164,14 +164,19 @@ namespace Binance.API.Csharp.Client
         /// <param name="interval">Time interval to retreive.</param>
         /// <param name="limit">Limit of records to retrieve.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Candlestick>> GetCandleSticks(string symbol, TimeInterval interval, int limit = 500)
+        public async Task<IEnumerable<Candlestick>> GetCandleSticks(string symbol, TimeInterval interval, DateTime? startTime = null, DateTime? endTime = null, int limit = 500)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
                 throw new ArgumentException("symbol cannot be empty. ", "symbol");
             }
 
-            var result = await _apiClient.CallAsync<dynamic>(ApiMethod.GET, EndPoints.Candlesticks, false, $"symbol={symbol.ToUpper()}&interval={interval.GetDescription()}&limit={limit}");
+            var args = $"symbol={symbol.ToUpper()}&interval={interval.GetDescription()}"
+                + (startTime .HasValue ? $"&startTime={startTime.Value.GetUnixTimeStamp()}" : "")
+                + (endTime.HasValue ? $"&endTime={endTime.Value.GetUnixTimeStamp()}" : "")
+                + $"&limit={limit}";
+
+            var result = await _apiClient.CallAsync<dynamic>(ApiMethod.GET, EndPoints.Candlesticks, false, args);
 
             var parser = new CustomParser();
             var parsedResult = parser.GetParsedCandlestick(result);
@@ -184,14 +189,11 @@ namespace Binance.API.Csharp.Client
         /// </summary>
         /// <param name="symbol">Ticker symbol.</param>
         /// <returns></returns>
-        public async Task<PriceChangeInfo> GetPriceChange24H(string symbol)
+        public async Task<IEnumerable<PriceChangeInfo>> GetPriceChange24H(string symbol = "")
         {
-            if (string.IsNullOrWhiteSpace(symbol))
-            {
-                throw new ArgumentException("symbol cannot be empty. ", "symbol");
-            }
+            var args = string.IsNullOrWhiteSpace(symbol) ? "" : $"symbol={symbol.ToUpper()}";
 
-            var result = await _apiClient.CallAsync<PriceChangeInfo>(ApiMethod.GET, EndPoints.TickerPriceChange24H, false, $"symbol={symbol.ToUpper()}");
+            var result = await _apiClient.CallAsync<IEnumerable< PriceChangeInfo>>(ApiMethod.GET, EndPoints.TickerPriceChange24H, false, args);
 
             return result;
         }
@@ -461,8 +463,8 @@ namespace Binance.API.Csharp.Client
 
             var args = $"asset={asset.ToUpper()}"
               + (status.HasValue ? $"&status={(int)status}" : "")
-              + (startTime.HasValue ? $"&startTime={Utilities.GenerateTimeStamp(startTime.Value)}" : "")
-              + (endTime.HasValue ? $"&endTime={Utilities.GenerateTimeStamp(endTime.Value)}" : "")
+              + (startTime.HasValue ? $"&startTime={startTime.Value.GetUnixTimeStamp()}" : "")
+              + (endTime.HasValue ? $"&endTime={endTime.Value.GetUnixTimeStamp()}" : "")
               + $"&recvWindow={recvWindow}";
 
             var result = await _apiClient.CallAsync<DepositHistory>(ApiMethod.POST, EndPoints.DepositHistory, true, args);

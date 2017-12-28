@@ -51,14 +51,14 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="interval">Time interval to retreive.</param>
         /// <param name="limit">Limit of records to retrieve.</param>
         /// <returns></returns>
-        Task<IEnumerable<Candlestick>> GetCandleSticks(string symbol, TimeInterval interval, int limit = 500);
+        Task<IEnumerable<Candlestick>> GetCandleSticks(string symbol, TimeInterval interval, DateTime? startTime = null, DateTime? endTime = null, int limit = 500);
 
         /// <summary>
         /// 24 hour price change statistics.
         /// </summary>
         /// <param name="symbol">Ticker symbol.</param>
         /// <returns></returns>
-        Task<PriceChangeInfo> GetPriceChange24H(string symbol);
+        Task<IEnumerable<PriceChangeInfo>> GetPriceChange24H(string symbol);
 
         /// <summary>
         /// Latest price for all symbols.
