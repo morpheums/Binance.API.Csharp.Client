@@ -4,6 +4,8 @@ namespace Binance.API.Csharp.Client.Models.Market
 {
     public class PriceChangeInfo
     {
+        [JsonProperty("symbol")]
+        public string Symbol { get; set; }
         [JsonProperty("priceChange")]
         public decimal PriceChange { get; set; }
         [JsonProperty("priceChangePercent")]

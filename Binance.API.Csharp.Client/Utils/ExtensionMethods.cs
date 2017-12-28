@@ -22,5 +22,15 @@ namespace Binance.API.Csharp.Client.Utils
                     .Single(x => x.GetValue(null).Equals(value)),
                 typeof(DescriptionAttribute)))?.Description ?? value.ToString();
         }
+
+        /// <summary>
+        /// Gets a timestamp in milliseconds.
+        /// </summary>
+        /// <returns>Timestamp in milliseconds.</returns>
+        public static string GetUnixTimeStamp(this DateTime baseDateTime)
+        {
+            var dtOffset = new DateTimeOffset(baseDateTime);
+            return dtOffset.ToUnixTimeMilliseconds().ToString();
+        }
     }
 }

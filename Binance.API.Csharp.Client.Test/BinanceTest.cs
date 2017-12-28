@@ -9,7 +9,7 @@ namespace Binance.API.Csharp.Client.Test
     public class BinanceTest
     {
         private static ApiClient apiClient = new ApiClient("@YourApiKey", "@YourApiSecret");
-        private static BinanceClient binanceClient = new BinanceClient(apiClient);
+        private static BinanceClient binanceClient = new BinanceClient(apiClient,false);
 
         #region General
         [TestMethod]
@@ -35,7 +35,7 @@ namespace Binance.API.Csharp.Client.Test
         [TestMethod]
         public void GetCandleSticks()
         {
-            var candlestick = binanceClient.GetCandleSticks("ethbtc", TimeInterval.Minutes_15).Result;
+            var candlestick = binanceClient.GetCandleSticks("ethbtc", TimeInterval.Minutes_15, new System.DateTime(2017,11,24), new System.DateTime(2017, 11, 26)).Result;
         }
 
         [TestMethod]
@@ -47,7 +47,7 @@ namespace Binance.API.Csharp.Client.Test
         [TestMethod]
         public void GetPriceChange24H()
         {
-            var priceChangeInfo = binanceClient.GetPriceChange24H("ethbtc").Result;
+            var priceChangeInfo = binanceClient.GetPriceChange24H().Result;
         }
 
         [TestMethod]
