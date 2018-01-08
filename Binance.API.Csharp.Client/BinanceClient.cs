@@ -189,12 +189,21 @@ namespace Binance.API.Csharp.Client
         /// </summary>
         /// <param name="symbol">Ticker symbol.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<PriceChangeInfo>> GetPriceChange24H(string symbol = "")
+        public async Task<PriceChangeInfo> GetPriceChange24H(string symbol)
         {
-            var args = string.IsNullOrWhiteSpace(symbol) ? "" : $"symbol={symbol.ToUpper()}";
+            var args = $"symbol={symbol.ToUpper()}";
+            var result = await _apiClient.CallAsync<PriceChangeInfo>(ApiMethod.GET, EndPoints.TickerPriceChange24H, false, args);
+            return result;
+        }
 
-            var result = await _apiClient.CallAsync<IEnumerable< PriceChangeInfo>>(ApiMethod.GET, EndPoints.TickerPriceChange24H, false, args);
-
+        /// <summary>
+        /// All 24 hour price change statistics.
+        /// </summary>
+        /// <param name="symbol">Ticker symbol.</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<PriceChangeInfo>> GetAllPriceChanges24H()
+        {
+            var result = await _apiClient.CallAsync<IEnumerable<PriceChangeInfo>>(ApiMethod.GET, EndPoints.TickerPriceChange24H, false);
             return result;
         }
 
