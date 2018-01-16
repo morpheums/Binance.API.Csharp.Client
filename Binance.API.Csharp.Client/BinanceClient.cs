@@ -88,10 +88,21 @@ namespace Binance.API.Csharp.Client
             }
         }
 
-        private void LoadTradingRules()
+        public void LoadTradingRules()
         {
             var apiClient = new ApiClient("", "", EndPoints.TradingRules, addDefaultHeaders: false);
             _tradingRules = apiClient.CallAsync<TradingRules>(ApiMethod.GET, "").Result;
+        }
+
+        public async Task<TradingRules> GetTradingRulesAsync()
+        {
+            if (_tradingRules != null)
+                return _tradingRules;
+            var result = await _apiClient.CallAsync<TradingRules>(ApiMethod.GET, EndPoints.TradingRules, false);
+
+            _tradingRules = result;
+
+            return _tradingRules;
         }
         #endregion
 
@@ -172,7 +183,7 @@ namespace Binance.API.Csharp.Client
             }
 
             var args = $"symbol={symbol.ToUpper()}&interval={interval.GetDescription()}"
-                + (startTime .HasValue ? $"&startTime={startTime.Value.GetUnixTimeStamp()}" : "")
+                + (startTime.HasValue ? $"&startTime={startTime.Value.GetUnixTimeStamp()}" : "")
                 + (endTime.HasValue ? $"&endTime={endTime.Value.GetUnixTimeStamp()}" : "")
                 + $"&limit={limit}";
 
@@ -193,7 +204,7 @@ namespace Binance.API.Csharp.Client
         {
             var args = string.IsNullOrWhiteSpace(symbol) ? "" : $"symbol={symbol.ToUpper()}";
 
-            var result = await _apiClient.CallAsync<IEnumerable< PriceChangeInfo>>(ApiMethod.GET, EndPoints.TickerPriceChange24H, false, args);
+            var result = await _apiClient.CallAsync<IEnumerable<PriceChangeInfo>>(ApiMethod.GET, EndPoints.TickerPriceChange24H, false, args);
 
             return result;
         }
