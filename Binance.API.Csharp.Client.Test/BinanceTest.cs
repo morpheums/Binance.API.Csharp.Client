@@ -47,7 +47,9 @@ namespace Binance.API.Csharp.Client.Test
         [TestMethod]
         public void GetPriceChange24H()
         {
-            var priceChangeInfo = binanceClient.GetPriceChange24H().Result;
+            var singleTickerInfo = binanceClient.GetPriceChange24H("ETHBTC").Result;
+
+            var allTickersInfo = binanceClient.GetPriceChange24H().Result;
         }
 
         [TestMethod]
