@@ -8,6 +8,8 @@ using Binance.API.Csharp.Client.Utils;
 using Binance.API.Csharp.Client.Models.Enums;
 using WebSocketSharp;
 using Binance.API.Csharp.Client.Models.WebSocket;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace Binance.API.Csharp.Client
 {
@@ -39,18 +41,53 @@ namespace Binance.API.Csharp.Client
 
             if (isSigned)
             {
-                parameters += (!string.IsNullOrWhiteSpace(parameters) ? "&timestamp=" : "timestamp=") + Utilities.GenerateTimeStamp(DateTime.Now);
+                // Joining provided parameters
+                parameters += (!string.IsNullOrWhiteSpace(parameters) ? "&timestamp=" : "timestamp=") + Utilities.GenerateTimeStamp(DateTime.Now.ToUniversalTime());
+
+                // Creating request signature
                 var signature = Utilities.GenerateSignature(_apiSecret, parameters);
                 finalEndpoint = $"{endpoint}?{parameters}&signature={signature}";
             }
 
             var request = new HttpRequestMessage(Utilities.CreateHttpMethod(method.ToString()), finalEndpoint);
-
             var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
+            {
+                // Api return is OK
+                response.EnsureSuccessStatusCode();
 
-            var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<T>(result);
+                // Get the result
+                var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                // Serialize and return result
+                return JsonConvert.DeserializeObject<T>(result);
+            }
+
+            // We received an error
+            if (response.StatusCode == HttpStatusCode.GatewayTimeout)
+            {
+                throw new Exception("Api Request Timeout.");
+            }
+
+            // Get te error code and message
+            var e = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            // Error Values
+            var eCode = 0;
+            string eMsg = "";
+            if (e.IsValidJson())
+            {
+                try
+                {
+                    var i = JObject.Parse(e);
+
+                    eCode = i["code"]?.Value<int>() ?? 0;
+                    eMsg = i["msg"]?.Value<string>();
+                }
+                catch { }
+            }
+
+            throw new Exception(string.Format("Api Error Code: {0} Message: {1}", eCode, eMsg));
         }
 
         /// <summary>
