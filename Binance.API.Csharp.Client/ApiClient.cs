@@ -105,12 +105,19 @@ namespace Binance.API.Csharp.Client
 
             ws.OnMessage += (sender, e) =>
             {
-                dynamic eventData;
+                dynamic eventData = null;
 
                 if (useCustomParser)
                 {
                     var customParser = new CustomParser();
-                    eventData = customParser.GetParsedDepthMessage(JsonConvert.DeserializeObject<dynamic>(e.Data));
+                    var datum = JsonConvert.DeserializeObject<dynamic>(e.Data);
+                    if (datum is JObject jobj)
+                    {
+                        if (datum["lastUpdateId"] != null)
+                            eventData = customParser.GetParsedDepthPartialMessage(datum);
+                        else
+                            eventData = customParser.GetParsedDepthMessage(datum);
+                    } 
                 }
                 else
                 {

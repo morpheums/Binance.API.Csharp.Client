@@ -100,5 +100,31 @@ namespace Binance.API.Csharp.Client.Utils
 
             return result;
         }
+
+        public DepthPartialMessage GetParsedDepthPartialMessage(dynamic messageData)
+        {
+            var result = new DepthPartialMessage
+            { 
+                UpdateId = messageData.lastUpdateId
+            };
+
+            var bids = new List<OrderBookOffer>();
+            var asks = new List<OrderBookOffer>();
+
+            foreach (JToken item in ((JArray)messageData.bids).ToArray())
+            {
+                bids.Add(new OrderBookOffer() { Price = decimal.Parse(item[0].ToString()), Quantity = decimal.Parse(item[1].ToString()) });
+            }
+
+            foreach (JToken item in ((JArray)messageData.asks).ToArray())
+            {
+                asks.Add(new OrderBookOffer() { Price = decimal.Parse(item[0].ToString()), Quantity = decimal.Parse(item[1].ToString()) });
+            }
+
+            result.Bids = bids;
+            result.Asks = asks;
+
+            return result;
+        }
     }
 }

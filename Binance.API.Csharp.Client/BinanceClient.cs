@@ -585,6 +585,18 @@ namespace Binance.API.Csharp.Client
             _apiClient.ConnectToWebSocket(param, depthHandler, true);
         }
 
+        public void ListenPartialDepthEndPoint(string symbol,int levels, ApiClientAbstract.MessageHandler<DepthPartialMessage> depthHandler)
+        {
+            if (string.IsNullOrWhiteSpace(symbol))
+            {
+                throw new ArgumentException("symbol cannot be empty. ", "symbol");
+            }
+            if (levels != 5 && levels != 10 && levels != 20)
+                throw new ArgumentException("Valid values for level are 5,10 or 20");
+            var param = symbol.ToLower() + "@depth" + levels;
+            _apiClient.ConnectToWebSocket(param, depthHandler, true);
+        }
+
         /// <summary>
         /// Listen to the Kline endpoint.
         /// </summary>
