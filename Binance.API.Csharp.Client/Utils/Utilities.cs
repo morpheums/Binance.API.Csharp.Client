@@ -10,6 +10,7 @@ namespace Binance.API.Csharp.Client.Utils
     /// </summary>
     public static class Utilities
     {
+        public static long DeltaTimeAdjustment { get; set; } = 0;
         /// <summary>
         /// Gets a HMACSHA256 signature based on the API Secret.
         /// </summary>
@@ -36,7 +37,7 @@ namespace Binance.API.Csharp.Client.Utils
         public static string GenerateTimeStamp(DateTime baseDateTime)
         {
             var dtOffset = new DateTimeOffset(baseDateTime);
-            return dtOffset.ToUnixTimeMilliseconds().ToString();
+            return (dtOffset.ToUnixTimeMilliseconds() + DeltaTimeAdjustment).ToString();
         }
 
         /// <summary>
