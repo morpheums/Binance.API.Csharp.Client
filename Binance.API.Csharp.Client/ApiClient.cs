@@ -42,7 +42,7 @@ namespace Binance.API.Csharp.Client
             if (isSigned)
             {
                 // Joining provided parameters
-                parameters += (!string.IsNullOrWhiteSpace(parameters) ? "&timestamp=" : "timestamp=") + Utilities.GenerateTimeStamp(DateTime.Now.ToUniversalTime());
+                parameters += (!string.IsNullOrWhiteSpace(parameters) ? "&timestamp=" : "timestamp=") +( Utilities.GenerateTimeStamp(DateTime.Now.ToUniversalTime()) );
 
                 // Creating request signature
                 var signature = Utilities.GenerateSignature(_apiSecret, parameters);
@@ -85,8 +85,7 @@ namespace Binance.API.Csharp.Client
                     eMsg = i["msg"]?.Value<string>();
                 }
                 catch { }
-            }
-
+            } 
             throw new Exception(string.Format("Api Error Code: {0} Message: {1}", eCode, eMsg));
         }
 
@@ -158,7 +157,7 @@ namespace Binance.API.Csharp.Client
             {
                 var eventData = JsonConvert.DeserializeObject<dynamic>(e.Data);
 
-                switch (eventData.e)
+                switch (eventData.e.Value)
                 {
                     case "outboundAccountInfo":
                         accountHandler(JsonConvert.DeserializeObject<AccountUpdatedMessage>(e.Data));
