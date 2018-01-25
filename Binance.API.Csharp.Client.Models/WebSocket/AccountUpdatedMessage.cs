@@ -17,12 +17,14 @@ namespace Binance.API.Csharp.Client.Models.WebSocket
         public int BuyerCommission { get; set; }
         [JsonProperty("s")]
         public int SellerCommission { get; set; }
-        [JsonProperty("t")]
+        [JsonProperty("T")]
         public bool CanTrade { get; set; }
-        [JsonProperty("w")]
+        [JsonProperty("W")]
         public bool CanWithdraw { get; set; }
-        [JsonProperty("d")]
+        [JsonProperty("D")]
         public bool CanDeposit { get; set; }
+        [JsonProperty("u")]
+        public long TimeLastAccountUpdate { get; set; }
         [JsonProperty("B")]
         public IEnumerable<Balance> Balances { get; set; }
     }
