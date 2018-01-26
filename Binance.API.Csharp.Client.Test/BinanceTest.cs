@@ -23,6 +23,13 @@ namespace Binance.API.Csharp.Client.Test
         {
             var serverTime = binanceClient.GetServerTime().Result;
         }
+
+	    [TestMethod]
+	    public void ExchangeInfo()
+	    {
+		    var rules = binanceClient.GetTradingRulesAsync().Result;
+			Thread.Sleep(1000);
+	    }
         #endregion
 
         #region Market Data
