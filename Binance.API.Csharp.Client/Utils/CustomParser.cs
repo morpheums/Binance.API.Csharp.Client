@@ -2,6 +2,7 @@
 using Binance.API.Csharp.Client.Models.WebSocket;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Binance.API.Csharp.Client.Utils
@@ -28,12 +29,20 @@ namespace Binance.API.Csharp.Client.Utils
 
             foreach (JToken item in ((JArray)orderBookData.bids).ToArray())
             {
-                bids.Add(new OrderBookOffer() { Price = decimal.Parse(item[0].ToString()), Quantity = decimal.Parse(item[1].ToString()) });
+	            bids.Add(new OrderBookOffer
+	            {
+		            Price = decimal.Parse(item[0].ToString(), CultureInfo.InvariantCulture),
+		            Quantity = decimal.Parse(item[1].ToString(), CultureInfo.InvariantCulture)
+	            });
             }
 
             foreach (JToken item in ((JArray)orderBookData.asks).ToArray())
             {
-                asks.Add(new OrderBookOffer() { Price = decimal.Parse(item[0].ToString()), Quantity = decimal.Parse(item[1].ToString()) });
+	            asks.Add(new OrderBookOffer
+	            {
+		            Price = decimal.Parse(item[0].ToString(), CultureInfo.InvariantCulture),
+		            Quantity = decimal.Parse(item[1].ToString(), CultureInfo.InvariantCulture)
+	            });
             }
 
             result.Bids = bids;
@@ -56,16 +65,16 @@ namespace Binance.API.Csharp.Client.Utils
                 result.Add(new Candlestick()
                 {
                     OpenTime = long.Parse(item[0].ToString()),
-                    Open = decimal.Parse(item[1].ToString()),
-                    High = decimal.Parse(item[2].ToString()),
-                    Low = decimal.Parse(item[3].ToString()),
-                    Close = decimal.Parse(item[4].ToString()),
-                    Volume = decimal.Parse(item[5].ToString()),
+                    Open = decimal.Parse(item[1].ToString(), CultureInfo.InvariantCulture),
+                    High = decimal.Parse(item[2].ToString(), CultureInfo.InvariantCulture),
+                    Low = decimal.Parse(item[3].ToString(), CultureInfo.InvariantCulture),
+                    Close = decimal.Parse(item[4].ToString(), CultureInfo.InvariantCulture),
+                    Volume = decimal.Parse(item[5].ToString(), CultureInfo.InvariantCulture),
                     CloseTime = long.Parse(item[6].ToString()),
-                    QuoteAssetVolume = decimal.Parse(item[7].ToString()),
+                    QuoteAssetVolume = decimal.Parse(item[7].ToString(), CultureInfo.InvariantCulture),
                     NumberOfTrades = int.Parse(item[8].ToString()),
-                    TakerBuyBaseAssetVolume = decimal.Parse(item[9].ToString()),
-                    TakerBuyQuoteAssetVolume = decimal.Parse(item[10].ToString())
+                    TakerBuyBaseAssetVolume = decimal.Parse(item[9].ToString(), CultureInfo.InvariantCulture),
+                    TakerBuyQuoteAssetVolume = decimal.Parse(item[10].ToString(), CultureInfo.InvariantCulture)
                 });
             }
 
@@ -87,12 +96,20 @@ namespace Binance.API.Csharp.Client.Utils
 
             foreach (JToken item in ((JArray)messageData.b).ToArray())
             {
-                bids.Add(new OrderBookOffer() { Price = decimal.Parse(item[0].ToString()), Quantity = decimal.Parse(item[1].ToString()) });
+	            bids.Add(new OrderBookOffer
+	            {
+		            Price = decimal.Parse(item[0].ToString(), CultureInfo.InvariantCulture),
+		            Quantity = decimal.Parse(item[1].ToString(), CultureInfo.InvariantCulture)
+	            });
             }
 
             foreach (JToken item in ((JArray)messageData.a).ToArray())
             {
-                asks.Add(new OrderBookOffer() { Price = decimal.Parse(item[0].ToString()), Quantity = decimal.Parse(item[1].ToString()) });
+	            asks.Add(new OrderBookOffer
+	            {
+		            Price = decimal.Parse(item[0].ToString(), CultureInfo.InvariantCulture),
+		            Quantity = decimal.Parse(item[1].ToString(), CultureInfo.InvariantCulture)
+	            });
             }
 
             result.Bids = bids;
@@ -113,12 +130,20 @@ namespace Binance.API.Csharp.Client.Utils
 
             foreach (JToken item in ((JArray)messageData.bids).ToArray())
             {
-                bids.Add(new OrderBookOffer() { Price = decimal.Parse(item[0].ToString()), Quantity = decimal.Parse(item[1].ToString()) });
+	            bids.Add(new OrderBookOffer()
+	            {
+		            Price = decimal.Parse(item[0].ToString(), CultureInfo.InvariantCulture),
+		            Quantity = decimal.Parse(item[1].ToString(), CultureInfo.InvariantCulture)
+	            });
             }
 
             foreach (JToken item in ((JArray)messageData.asks).ToArray())
             {
-                asks.Add(new OrderBookOffer() { Price = decimal.Parse(item[0].ToString()), Quantity = decimal.Parse(item[1].ToString()) });
+	            asks.Add(new OrderBookOffer()
+	            {
+		            Price = decimal.Parse(item[0].ToString(), CultureInfo.InvariantCulture),
+		            Quantity = decimal.Parse(item[1].ToString(), CultureInfo.InvariantCulture)
+	            });
             }
 
             result.Bids = bids;
