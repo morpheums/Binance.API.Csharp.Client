@@ -581,12 +581,12 @@ namespace Binance.API.Csharp.Client
 
         #region Web Socket Client
 
-	    /// <summary>
-	    /// Listen to the Depth endpoint.
-	    /// </summary>
-	    /// <param name="symbol">Ticker symbol.</param>
-	    /// <param name="depthHandler">Handler to be used when a message is received.</param>
-	    public WebSocket ListenDepthEndpoint(string symbol, ApiClientAbstract.MessageHandler<DepthMessage> depthHandler)
+        /// <summary>
+        /// Listen to the Depth endpoint.
+        /// </summary>
+        /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="depthHandler">Handler to be used when a message is received.</param>
+        public WebSocket ListenDepthEndpoint(string symbol, ApiClientAbstract.MessageHandler<DepthMessage> depthHandler)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -609,13 +609,13 @@ namespace Binance.API.Csharp.Client
             return _apiClient.ConnectToWebSocket(param, depthHandler, true);
         }
 
-	    /// <summary>
-	    /// Listen to the Kline endpoint.
-	    /// </summary>
-	    /// <param name="symbol">Ticker symbol.</param>
-	    /// <param name="interval">Time interval to retreive.</param>
-	    /// <param name="klineHandler">Handler to be used when a message is received.</param>
-	    public WebSocket ListenKlineEndpoint(string symbol, TimeInterval interval, ApiClientAbstract.MessageHandler<KlineMessage> klineHandler)
+        /// <summary>
+        /// Listen to the Kline endpoint.
+        /// </summary>
+        /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="interval">Time interval to retreive.</param>
+        /// <param name="klineHandler">Handler to be used when a message is received.</param>
+        public WebSocket ListenKlineEndpoint(string symbol, TimeInterval interval, ApiClientAbstract.MessageHandler<KlineMessage> klineHandler)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -626,12 +626,12 @@ namespace Binance.API.Csharp.Client
             return _apiClient.ConnectToWebSocket(param, klineHandler);
         }
 
-	    /// <summary>
-	    /// Listen to the Trades endpoint.
-	    /// </summary>
-	    /// <param name="symbol">Ticker symbol.</param>
-	    /// <param name="tradeHandler">Handler to be used when a message is received.</param>
-	    public WebSocket ListenTradeEndpoint(string symbol, ApiClientAbstract.MessageHandler<AggregateTradeMessage> tradeHandler)
+        /// <summary>
+        /// Listen to the Trades endpoint.
+        /// </summary>
+        /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="tradeHandler">Handler to be used when a message is received.</param>
+        public WebSocket ListenTradeEndpoint(string symbol, ApiClientAbstract.MessageHandler<AggregateTradeMessage> tradeHandler)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
