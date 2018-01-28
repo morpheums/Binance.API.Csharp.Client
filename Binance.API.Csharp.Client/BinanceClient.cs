@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebSocketSharp;
 
 namespace Binance.API.Csharp.Client
 {
@@ -569,12 +570,13 @@ namespace Binance.API.Csharp.Client
         #endregion
 
         #region Web Socket Client
-        /// <summary>
-        /// Listen to the Depth endpoint.
-        /// </summary>
-        /// <param name="symbol">Ticker symbol.</param>
-        /// <param name="depthHandler">Handler to be used when a message is received.</param>
-        public void ListenDepthEndpoint(string symbol, ApiClientAbstract.MessageHandler<DepthMessage> depthHandler)
+
+	    /// <summary>
+	    /// Listen to the Depth endpoint.
+	    /// </summary>
+	    /// <param name="symbol">Ticker symbol.</param>
+	    /// <param name="depthHandler">Handler to be used when a message is received.</param>
+	    public WebSocket ListenDepthEndpoint(string symbol, ApiClientAbstract.MessageHandler<DepthMessage> depthHandler)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -582,10 +584,10 @@ namespace Binance.API.Csharp.Client
             }
 
             var param = symbol + "@depth";
-            _apiClient.ConnectToWebSocket(param, depthHandler, true);
+            return _apiClient.ConnectToWebSocket(param, depthHandler, true);
         }
 
-        public void ListenPartialDepthEndPoint(string symbol,int levels, ApiClientAbstract.MessageHandler<DepthPartialMessage> depthHandler)
+        public WebSocket ListenPartialDepthEndPoint(string symbol,int levels, ApiClientAbstract.MessageHandler<DepthPartialMessage> depthHandler)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -594,16 +596,16 @@ namespace Binance.API.Csharp.Client
             if (levels != 5 && levels != 10 && levels != 20)
                 throw new ArgumentException("Valid values for level are 5,10 or 20");
             var param = symbol.ToLower() + "@depth" + levels;
-            _apiClient.ConnectToWebSocket(param, depthHandler, true);
+            return _apiClient.ConnectToWebSocket(param, depthHandler, true);
         }
 
-        /// <summary>
-        /// Listen to the Kline endpoint.
-        /// </summary>
-        /// <param name="symbol">Ticker symbol.</param>
-        /// <param name="interval">Time interval to retreive.</param>
-        /// <param name="klineHandler">Handler to be used when a message is received.</param>
-        public void ListenKlineEndpoint(string symbol, TimeInterval interval, ApiClientAbstract.MessageHandler<KlineMessage> klineHandler)
+	    /// <summary>
+	    /// Listen to the Kline endpoint.
+	    /// </summary>
+	    /// <param name="symbol">Ticker symbol.</param>
+	    /// <param name="interval">Time interval to retreive.</param>
+	    /// <param name="klineHandler">Handler to be used when a message is received.</param>
+	    public WebSocket ListenKlineEndpoint(string symbol, TimeInterval interval, ApiClientAbstract.MessageHandler<KlineMessage> klineHandler)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -611,15 +613,15 @@ namespace Binance.API.Csharp.Client
             }
 
             var param = symbol + $"@kline_{interval.GetDescription()}";
-            _apiClient.ConnectToWebSocket(param, klineHandler);
+            return _apiClient.ConnectToWebSocket(param, klineHandler);
         }
 
-        /// <summary>
-        /// Listen to the Trades endpoint.
-        /// </summary>
-        /// <param name="symbol">Ticker symbol.</param>
-        /// <param name="tradeHandler">Handler to be used when a message is received.</param>
-        public void ListenTradeEndpoint(string symbol, ApiClientAbstract.MessageHandler<AggregateTradeMessage> tradeHandler)
+	    /// <summary>
+	    /// Listen to the Trades endpoint.
+	    /// </summary>
+	    /// <param name="symbol">Ticker symbol.</param>
+	    /// <param name="tradeHandler">Handler to be used when a message is received.</param>
+	    public WebSocket ListenTradeEndpoint(string symbol, ApiClientAbstract.MessageHandler<AggregateTradeMessage> tradeHandler)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -627,7 +629,7 @@ namespace Binance.API.Csharp.Client
             }
 
             var param = symbol + "@aggTrade";
-            _apiClient.ConnectToWebSocket(param, tradeHandler);
+            return _apiClient.ConnectToWebSocket(param, tradeHandler);
         }
 
         /// <summary>
