@@ -58,6 +58,12 @@ namespace Binance.API.Csharp.Client
                 }
             }
 
+            //quantity needs to be conform to this regex "^([0-9]{1,20})(\.[0-9]{1,20})?$" -> 20 decimal digits
+            if (quantity != decimal.Round(quantity, 20))
+            {
+                throw new ArgumentException("Quantity parameter should have no mora than 20 decimal digits.");
+            }
+
             // Validating Trading Rules
             if (_tradingRules != null)
             {
@@ -258,8 +264,10 @@ namespace Binance.API.Csharp.Client
         {
             //Validates that the order is valid.
             ValidateOrderValue(symbol, orderType, price, quantity, icebergQty);
-
-            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&quantity={quantity}"
+            //quantity needs to be conform to this regex ^([0-9]{1,20})(\.[0-9]{1,20})?$ -> 20 decimal digits
+            quantity = decimal.Round(quantity, 20);
+            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}"
+                + $"&quantity={quantity}"
                 + (orderType == OrderType.LIMIT ? $"&timeInForce={timeInForce}" : "")
                 + (orderType == OrderType.LIMIT ? $"&price={price}" : "")
                 + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "")
@@ -284,8 +292,10 @@ namespace Binance.API.Csharp.Client
         {
             //Validates that the order is valid.
             ValidateOrderValue(symbol, orderType, price, quantity, icebergQty);
-
-            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}&quantity={quantity}"
+            //quantity needs to be conform to this regex ^([0-9]{1,20})(\.[0-9]{1,20})?$ -> 20 decimal digits
+            quantity = decimal.Round(quantity, 20);
+            var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}"
+                + $"&quantity={quantity}" //quantity needs to  be conform to this regex ^([0-9]{1,20})(\.[0-9]{1,20})?$
                 + (orderType == OrderType.LIMIT ? $"&timeInForce={timeInForce}" : "")
                 + (orderType == OrderType.LIMIT ? $"&price={price}" : "")
                 + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "")
@@ -585,7 +595,7 @@ namespace Binance.API.Csharp.Client
             _apiClient.ConnectToWebSocket(param, depthHandler, true);
         }
 
-        public void ListenPartialDepthEndPoint(string symbol,int levels, ApiClientAbstract.MessageHandler<DepthPartialMessage> depthHandler)
+        public void ListenPartialDepthEndPoint(string symbol, int levels, ApiClientAbstract.MessageHandler<DepthPartialMessage> depthHandler)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
