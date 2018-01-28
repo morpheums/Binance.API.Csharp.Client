@@ -7,6 +7,7 @@ using Binance.API.Csharp.Client.Models.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebSocketSharp;
 using static Binance.API.Csharp.Client.Domain.Abstract.ApiClientAbstract;
 
 namespace Binance.API.Csharp.Client.Domain.Interfaces
@@ -210,27 +211,31 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         #endregion
 
         #region WebSocket
-        /// <summary>
-        /// Listen to the Depth endpoint.
-        /// </summary>
-        /// <param name="symbol">Ticker symbol.</param>
-        /// <param name="depthHandler">Handler to be used when a message is received.</param>
-        void ListenDepthEndpoint(string symbol, MessageHandler<DepthMessage> messageHandler);
 
-        /// <summary>
-        /// Listen to the Kline endpoint.
-        /// </summary>
-        /// <param name="symbol">Ticker symbol.</param>
-        /// <param name="interval">Time interval to retreive.</param>
-        /// <param name="klineHandler">Handler to be used when a message is received.</param>
-        void ListenKlineEndpoint(string symbol, TimeInterval interval, MessageHandler<KlineMessage> messageHandler);
+	    /// <summary>
+	    /// Listen to the Depth endpoint.
+	    /// </summary>
+	    /// <param name="symbol">Ticker symbol.</param>
+	    /// <param name="messageHandler"></param>
+	    /// <param name="depthHandler">Handler to be used when a message is received.</param>
+	    WebSocket ListenDepthEndpoint(string symbol, MessageHandler<DepthMessage> messageHandler);
 
-        /// <summary>
-        /// Listen to the Trades endpoint.
-        /// </summary>
-        /// <param name="symbol">Ticker symbol.</param>
-        /// <param name="tradeHandler">Handler to be used when a message is received.</param>
-        void ListenTradeEndpoint(string symbol, MessageHandler<AggregateTradeMessage> messageHandler);
+	    /// <summary>
+	    /// Listen to the Kline endpoint.
+	    /// </summary>
+	    /// <param name="symbol">Ticker symbol.</param>
+	    /// <param name="interval">Time interval to retreive.</param>
+	    /// <param name="messageHandler"></param>
+	    /// <param name="klineHandler">Handler to be used when a message is received.</param>
+	    WebSocket ListenKlineEndpoint(string symbol, TimeInterval interval, MessageHandler<KlineMessage> messageHandler);
+
+	    /// <summary>
+	    /// Listen to the Trades endpoint.
+	    /// </summary>
+	    /// <param name="symbol">Ticker symbol.</param>
+	    /// <param name="messageHandler"></param>
+	    /// <param name="tradeHandler">Handler to be used when a message is received.</param>
+	    WebSocket ListenTradeEndpoint(string symbol, MessageHandler<AggregateTradeMessage> messageHandler);
 
         /// <summary>
         /// Listen to the User Data endpoint.
