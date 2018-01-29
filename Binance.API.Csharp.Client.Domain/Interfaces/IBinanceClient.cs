@@ -218,7 +218,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
 	    /// <param name="symbol">Ticker symbol.</param>
 	    /// <param name="messageHandler"></param>
 	    /// <param name="depthHandler">Handler to be used when a message is received.</param>
-	    WebSocket ListenDepthEndpoint(string symbol, MessageHandler<DepthMessage> messageHandler);
+	    WebSocket ListenDepthEndpoint(string symbol, MessageHandler<DepthMessage> messageHandler, Action<CloseEventArgs> onClose);
 
 	    /// <summary>
 	    /// Listen to the Kline endpoint.
@@ -227,7 +227,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
 	    /// <param name="interval">Time interval to retreive.</param>
 	    /// <param name="messageHandler"></param>
 	    /// <param name="klineHandler">Handler to be used when a message is received.</param>
-	    WebSocket ListenKlineEndpoint(string symbol, TimeInterval interval, MessageHandler<KlineMessage> messageHandler);
+	    WebSocket ListenKlineEndpoint(string symbol, TimeInterval interval, MessageHandler<KlineMessage> messageHandler, Action<CloseEventArgs> onClose);
 
 	    /// <summary>
 	    /// Listen to the Trades endpoint.
@@ -235,7 +235,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
 	    /// <param name="symbol">Ticker symbol.</param>
 	    /// <param name="messageHandler"></param>
 	    /// <param name="tradeHandler">Handler to be used when a message is received.</param>
-	    WebSocket ListenTradeEndpoint(string symbol, MessageHandler<AggregateTradeMessage> messageHandler);
+	    WebSocket ListenTradeEndpoint(string symbol, MessageHandler<AggregateTradeMessage> messageHandler, Action<CloseEventArgs> onClose);
 
         /// <summary>
         /// Listen to the User Data endpoint.
@@ -244,7 +244,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="tradesHandler">Handler to be used when a trade message is received.</param>
         /// <param name="ordersHandler">Handler to be used when a order message is received.</param>
         /// <returns></returns>
-        string ListenUserDataEndpoint(MessageHandler<AccountUpdatedMessage> accountInfoHandler, MessageHandler<OrderOrTradeUpdatedMessage> tradesHandler, MessageHandler<OrderOrTradeUpdatedMessage> ordersHandler);
+        string ListenUserDataEndpoint(MessageHandler<AccountUpdatedMessage> accountInfoHandler, MessageHandler<OrderOrTradeUpdatedMessage> tradesHandler, MessageHandler<OrderOrTradeUpdatedMessage> ordersHandler, Action<CloseEventArgs> onClose);
         #endregion
     }
 }

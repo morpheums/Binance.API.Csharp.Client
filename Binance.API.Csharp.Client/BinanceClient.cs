@@ -17,7 +17,7 @@ using WebSocketSharp;
 namespace Binance.API.Csharp.Client
 {
     public class BinanceClient : BinanceClientAbstract, IBinanceClient
-    {
+    { 
         /// <summary>
         /// ctor.
         /// </summary>
@@ -586,7 +586,7 @@ namespace Binance.API.Csharp.Client
         /// </summary>
         /// <param name="symbol">Ticker symbol.</param>
         /// <param name="depthHandler">Handler to be used when a message is received.</param>
-        public WebSocket ListenDepthEndpoint(string symbol, ApiClientAbstract.MessageHandler<DepthMessage> depthHandler)
+        public WebSocket ListenDepthEndpoint(string symbol, ApiClientAbstract.MessageHandler<DepthMessage> depthHandler, Action<CloseEventArgs> onClose = null)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -594,10 +594,10 @@ namespace Binance.API.Csharp.Client
             }
 
             var param = symbol + "@depth";
-            return _apiClient.ConnectToWebSocket(param, depthHandler, true);
+            return _apiClient.ConnectToWebSocket(param, depthHandler, onClose, true);
         }
 
-        public WebSocket ListenPartialDepthEndPoint(string symbol,int levels, ApiClientAbstract.MessageHandler<DepthPartialMessage> depthHandler)
+        public WebSocket ListenPartialDepthEndPoint(string symbol, int levels, ApiClientAbstract.MessageHandler<DepthPartialMessage> depthHandler, Action<CloseEventArgs> onClose = null)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -606,7 +606,7 @@ namespace Binance.API.Csharp.Client
             if (levels != 5 && levels != 10 && levels != 20)
                 throw new ArgumentException("Valid values for level are 5,10 or 20");
             var param = symbol.ToLower() + "@depth" + levels;
-            return _apiClient.ConnectToWebSocket(param, depthHandler, true);
+            return _apiClient.ConnectToWebSocket(param, depthHandler, onClose, true);
         }
 
         /// <summary>
@@ -615,7 +615,7 @@ namespace Binance.API.Csharp.Client
         /// <param name="symbol">Ticker symbol.</param>
         /// <param name="interval">Time interval to retreive.</param>
         /// <param name="klineHandler">Handler to be used when a message is received.</param>
-        public WebSocket ListenKlineEndpoint(string symbol, TimeInterval interval, ApiClientAbstract.MessageHandler<KlineMessage> klineHandler)
+        public WebSocket ListenKlineEndpoint(string symbol, TimeInterval interval, ApiClientAbstract.MessageHandler<KlineMessage> klineHandler, Action<CloseEventArgs> onClose = null)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -623,7 +623,7 @@ namespace Binance.API.Csharp.Client
             }
 
             var param = symbol + $"@kline_{interval.GetDescription()}";
-            return _apiClient.ConnectToWebSocket(param, klineHandler);
+            return _apiClient.ConnectToWebSocket(param, klineHandler, onClose);
         }
 
         /// <summary>
@@ -631,7 +631,7 @@ namespace Binance.API.Csharp.Client
         /// </summary>
         /// <param name="symbol">Ticker symbol.</param>
         /// <param name="tradeHandler">Handler to be used when a message is received.</param>
-        public WebSocket ListenTradeEndpoint(string symbol, ApiClientAbstract.MessageHandler<AggregateTradeMessage> tradeHandler)
+        public WebSocket ListenTradeEndpoint(string symbol, ApiClientAbstract.MessageHandler<AggregateTradeMessage> tradeHandler, Action<CloseEventArgs> onClose = null)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -639,7 +639,7 @@ namespace Binance.API.Csharp.Client
             }
 
             var param = symbol + "@aggTrade";
-            return _apiClient.ConnectToWebSocket(param, tradeHandler);
+            return _apiClient.ConnectToWebSocket(param, tradeHandler, onClose);
         }
 
         /// <summary>
@@ -649,11 +649,11 @@ namespace Binance.API.Csharp.Client
         /// <param name="tradesHandler">Handler to be used when a trade message is received.</param>
         /// <param name="ordersHandler">Handler to be used when a order message is received.</param>
         /// <returns></returns>
-        public string ListenUserDataEndpoint(ApiClientAbstract.MessageHandler<AccountUpdatedMessage> accountInfoHandler, ApiClientAbstract.MessageHandler<OrderOrTradeUpdatedMessage> tradesHandler, ApiClientAbstract.MessageHandler<OrderOrTradeUpdatedMessage> ordersHandler)
+        public string ListenUserDataEndpoint(ApiClientAbstract.MessageHandler<AccountUpdatedMessage> accountInfoHandler, ApiClientAbstract.MessageHandler<OrderOrTradeUpdatedMessage> tradesHandler, ApiClientAbstract.MessageHandler<OrderOrTradeUpdatedMessage> ordersHandler, Action<CloseEventArgs> onClose = null)
         {
             var listenKey = StartUserStream().Result.ListenKey;
 
-            _apiClient.ConnectToUserDataWebSocket(listenKey, accountInfoHandler, tradesHandler, ordersHandler);
+            _apiClient.ConnectToUserDataWebSocket(listenKey, accountInfoHandler, tradesHandler, ordersHandler, onClose);
 
             return listenKey;
         }
