@@ -17,7 +17,7 @@ using WebSocketSharp;
 namespace Binance.API.Csharp.Client
 {
     public class BinanceClient : BinanceClientAbstract, IBinanceClient
-    { 
+    {
         /// <summary>
         /// ctor.
         /// </summary>
@@ -261,7 +261,7 @@ namespace Binance.API.Csharp.Client
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, decimal icebergQty = 0m, long recvWindow = 5000)
+        public async Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, string clientOrderId = null, decimal icebergQty = 0m, long recvWindow = 5000)
         {
             //Validates that the order is valid.
             ValidateOrderValue(symbol, orderType, price, quantity, icebergQty);
@@ -271,8 +271,10 @@ namespace Binance.API.Csharp.Client
                 + $"&quantity={quantity}"
                 + (orderType == OrderType.LIMIT ? $"&timeInForce={timeInForce}" : "")
                 + (orderType == OrderType.LIMIT ? $"&price={price}" : "")
+                + (clientOrderId != null ? $"&newClientOrderId={clientOrderId}" : "")
                 + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "")
                 + $"&recvWindow={recvWindow}";
+       
             var result = await _apiClient.CallAsync<NewOrder>(ApiMethod.POST, EndPoints.NewOrder, true, args);
 
             return result;
@@ -289,18 +291,20 @@ namespace Binance.API.Csharp.Client
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, decimal icebergQty = 0m, long recvWindow = 5000)
+        public async Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, string clientOrderId = null, decimal icebergQty = 0m, long recvWindow = 5000)
         {
             //Validates that the order is valid.
             ValidateOrderValue(symbol, orderType, price, quantity, icebergQty);
             //quantity needs to be conform to this regex ^([0-9]{1,20})(\.[0-9]{1,20})?$ -> 20 decimal digits
             quantity = decimal.Round(quantity, 20);
             var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}"
-                + $"&quantity={quantity}" //quantity needs to  be conform to this regex ^([0-9]{1,20})(\.[0-9]{1,20})?$
-                + (orderType == OrderType.LIMIT ? $"&timeInForce={timeInForce}" : "")
-                + (orderType == OrderType.LIMIT ? $"&price={price}" : "")
-                + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "")
-                + $"&recvWindow={recvWindow}";
+                 + $"&quantity={quantity}"
+                 + (orderType == OrderType.LIMIT ? $"&timeInForce={timeInForce}" : "")
+                 + (orderType == OrderType.LIMIT ? $"&price={price}" : "")
+                 + (clientOrderId != null ? $"&newClientOrderId ={clientOrderId}" : "")
+                 + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "")
+                 + $"&recvWindow={recvWindow}";
+
             var result = await _apiClient.CallAsync<dynamic>(ApiMethod.POST, EndPoints.NewOrderTest, true, args);
 
             return result;
