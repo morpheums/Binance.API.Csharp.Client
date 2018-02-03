@@ -266,7 +266,9 @@ namespace Binance.API.Csharp.Client
             //Validates that the order is valid.
             ValidateOrderValue(symbol, orderType, price, quantity, icebergQty);
             //quantity needs to be conform to this regex ^([0-9]{1,20})(\.[0-9]{1,20})?$ -> 20 decimal digits
-            quantity = decimal.Round(quantity, 20);
+            //remove trailing zeros from quantity and price
+            quantity = quantity / 1.000000000000000000000000000000m;
+            price = price / 1.000000000000000000000000000000m;
             var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}"
                 + $"&quantity={quantity}"
                 + (orderType == OrderType.LIMIT ? $"&timeInForce={timeInForce}" : "")
@@ -274,7 +276,7 @@ namespace Binance.API.Csharp.Client
                 + (clientOrderId != null ? $"&newClientOrderId={clientOrderId}" : "")
                 + (icebergQty > 0m ? $"&icebergQty={icebergQty}" : "")
                 + $"&recvWindow={recvWindow}";
-       
+
             var result = await _apiClient.CallAsync<NewOrder>(ApiMethod.POST, EndPoints.NewOrder, true, args);
 
             return result;
@@ -296,7 +298,8 @@ namespace Binance.API.Csharp.Client
             //Validates that the order is valid.
             ValidateOrderValue(symbol, orderType, price, quantity, icebergQty);
             //quantity needs to be conform to this regex ^([0-9]{1,20})(\.[0-9]{1,20})?$ -> 20 decimal digits
-            quantity = decimal.Round(quantity, 20);
+            quantity = quantity / 1.000000000000000000000000000000m;
+            price = price / 1.000000000000000000000000000000m;
             var args = $"symbol={symbol.ToUpper()}&side={side}&type={orderType}"
                  + $"&quantity={quantity}"
                  + (orderType == OrderType.LIMIT ? $"&timeInForce={timeInForce}" : "")
@@ -386,14 +389,12 @@ namespace Binance.API.Csharp.Client
         /// <param name="symbol">Ticker symbol.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Order>> GetCurrentOpenOrders(string symbol, long recvWindow = 5000)
+        public async Task<IEnumerable<Order>> GetCurrentOpenOrders(string symbol = null, long recvWindow = 5000)
         {
-            if (string.IsNullOrWhiteSpace(symbol))
-            {
-                throw new ArgumentException("symbol cannot be empty. ", "symbol");
-            }
 
-            var result = await _apiClient.CallAsync<IEnumerable<Order>>(ApiMethod.GET, EndPoints.CurrentOpenOrders, true, $"symbol={symbol.ToUpper()}&recvWindow={recvWindow}");
+            var args = $"recvWindow={recvWindow}" +
+                (!string.IsNullOrEmpty(symbol) ? $"&symbol={symbol.ToUpper()}" : "");
+            var result = await _apiClient.CallAsync<IEnumerable<Order>>(ApiMethod.GET, EndPoints.CurrentOpenOrders, true, args);
 
             return result;
         }
