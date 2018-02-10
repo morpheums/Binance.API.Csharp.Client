@@ -115,6 +115,19 @@ namespace Binance.API.Csharp.Client
 
             return result;
         }
+
+
+        /// <summary>
+        /// Get current system status
+        /// </summary>
+        /// <returns></returns>
+        public async Task<SystemStatus> GetSystemStatus()
+        {
+            var result = await _apiClient.CallAsync<SystemStatus>(ApiMethod.GET, EndPoints.CheckSystemStatus, false);
+
+            return result;
+        }
+
         #endregion
 
         #region Market Data

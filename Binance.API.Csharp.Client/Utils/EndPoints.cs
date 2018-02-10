@@ -8,6 +8,7 @@
         #region General Endpoints
         public static readonly string TestConnectivity = "/api/v1/ping";
         public static readonly string CheckServerTime = "/api/v1/time";
+        public static readonly string CheckSystemStatus = "/wapi/v3/systemStatus.html";
         #endregion
 
         #region Market Data Endpoints

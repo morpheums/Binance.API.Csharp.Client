@@ -151,7 +151,7 @@ namespace Binance.API.Csharp.Client
             {
                 var eventData = JsonConvert.DeserializeObject<dynamic>(e.Data);
 
-                switch (eventData.e)
+                switch ((string)eventData.e)
                 {
                     case "outboundAccountInfo":
                         accountHandler(JsonConvert.DeserializeObject<AccountUpdatedMessage>(e.Data));

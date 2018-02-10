@@ -55,11 +55,13 @@
     <Compile Include="Enums\DepositStatus.cs" />
     <Compile Include="Enums\OrderSide.cs" />
     <Compile Include="Enums\OrderType.cs" />
+    <Compile Include="Enums\Status.cs" />
     <Compile Include="Enums\TimeInForce.cs" />
     <Compile Include="Enums\TimeInterval.cs" />
     <Compile Include="Enums\WithdrawStatus.cs" />
     <Compile Include="General\ServerInfo.cs" />
     <Compile Include="Account\AccountInfo.cs" />
+    <Compile Include="General\SystemStatus.cs" />
     <Compile Include="Market\AggregateTrade.cs" />
     <Compile Include="Market\Candlestick.cs" />
     <Compile Include="Market\OrderBook.cs" />

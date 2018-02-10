@@ -23,6 +23,12 @@ namespace Binance.API.Csharp.Client.Test
         {
             var serverTime = binanceClient.GetServerTime().Result;
         }
+
+        [TestMethod]
+        public void GetSystemStatus()
+        {
+            var systemStatus = binanceClient.GetSystemStatus().Result;
+        }
         #endregion
 
         #region Market Data
