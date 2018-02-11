@@ -97,7 +97,7 @@ namespace Binance.API.Csharp.Client
         /// <param name="parameters">Paremeters to send to the Websocket.</param>
         /// <param name="messageDelegate">Deletage to callback after receive a message.</param>
         /// <param name="useCustomParser">Specifies if needs to use a custom parser for the response message.</param>
-        public void ConnectToWebSocket<T>(string parameters, MessageHandler<T> messageHandler, bool useCustomParser = false)
+        public WebSocket ConnectToWebSocket<T>(string parameters, MessageHandler<T> messageHandler, bool useCustomParser = false)
         {
             var finalEndpoint = _webSocketEndpoint + parameters;
 
@@ -132,6 +132,7 @@ namespace Binance.API.Csharp.Client
 
             ws.Connect();
             _openSockets.Add(ws);
+            return ws;
         }
 
         /// <summary>

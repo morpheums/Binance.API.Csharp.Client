@@ -1,6 +1,7 @@
 ﻿using Binance.API.Csharp.Client.Models.Enums;
 using Binance.API.Csharp.Client.Models.WebSocket;
 using System.Threading.Tasks;
+using WebSocketSharp;
 using static Binance.API.Csharp.Client.Domain.Abstract.ApiClientAbstract;
 
 namespace Binance.API.Csharp.Client.Domain.Interfaces
@@ -25,7 +26,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="parameters">Paremeters to send to the Websocket.</param>
         /// <param name="messageDelegate">Deletage to callback after receive a message.</param>
         /// <param name="useCustomParser">Specifies if needs to use a custom parser for the response message.</param>
-        void ConnectToWebSocket<T>(string parameters, MessageHandler<T> messageDelegate, bool useCustomParser = false);
+        WebSocket ConnectToWebSocket<T>(string parameters, MessageHandler<T> messageDelegate, bool useCustomParser = false);
 
         /// <summary>
         /// Connects to a UserData Websocket endpoint.
