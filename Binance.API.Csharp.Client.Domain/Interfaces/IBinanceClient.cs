@@ -7,6 +7,7 @@ using Binance.API.Csharp.Client.Models.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebSocketSharp;
 using static Binance.API.Csharp.Client.Domain.Abstract.ApiClientAbstract;
 
 namespace Binance.API.Csharp.Client.Domain.Interfaces
@@ -215,7 +216,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// </summary>
         /// <param name="symbol">Ticker symbol.</param>
         /// <param name="depthHandler">Handler to be used when a message is received.</param>
-        void ListenDepthEndpoint(string symbol, MessageHandler<DepthMessage> messageHandler);
+        WebSocket ListenDepthEndpoint(string symbol, MessageHandler<DepthMessage> messageHandler);
 
         /// <summary>
         /// Listen to the Kline endpoint.
@@ -223,14 +224,14 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="symbol">Ticker symbol.</param>
         /// <param name="interval">Time interval to retreive.</param>
         /// <param name="klineHandler">Handler to be used when a message is received.</param>
-        void ListenKlineEndpoint(string symbol, TimeInterval interval, MessageHandler<KlineMessage> messageHandler);
+        WebSocket ListenKlineEndpoint(string symbol, TimeInterval interval, MessageHandler<KlineMessage> messageHandler);
 
         /// <summary>
         /// Listen to the Trades endpoint.
         /// </summary>
         /// <param name="symbol">Ticker symbol.</param>
         /// <param name="tradeHandler">Handler to be used when a message is received.</param>
-        void ListenTradeEndpoint(string symbol, MessageHandler<AggregateTradeMessage> messageHandler);
+        WebSocket ListenTradeEndpoint(string symbol, MessageHandler<AggregateTradeMessage> messageHandler);
 
         /// <summary>
         /// Listen to the User Data endpoint.
