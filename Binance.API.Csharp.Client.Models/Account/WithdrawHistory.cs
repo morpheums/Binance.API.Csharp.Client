@@ -6,7 +6,7 @@ namespace Binance.API.Csharp.Client.Models.Account
     public class WithdrawHistory
     {
         [JsonProperty("withdrawList")]
-        public IEnumerable<Deposit> WithdrawList { get; set; }
+        public IEnumerable<Withdraw> WithdrawList { get; set; }
         [JsonProperty("success")]
         public bool Success { get; set; }
     }
