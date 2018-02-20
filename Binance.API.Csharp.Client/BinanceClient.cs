@@ -437,18 +437,34 @@ namespace Binance.API.Csharp.Client
         /// <param name="symbol">Ticker symbol.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Trade>> GetTradeList(string symbol, long recvWindow = 5000)
+        public async Task<IEnumerable<Trade>> GetTradeList(string symbol, int limit, long fromId, long recvWindow = 5000)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
                 throw new ArgumentException("symbol cannot be empty. ", "symbol");
             }
-
-            var result = await _apiClient.CallAsync<IEnumerable<Trade>>(ApiMethod.GET, EndPoints.TradeList, true, $"symbol={symbol.ToUpper()}&recvWindow={recvWindow}");
+            var para = $"symbol={symbol.ToUpper()}&limit={limit}&fromId={fromId}&recvWindow={recvWindow}";
+            var result = await _apiClient.CallAsync<IEnumerable<Trade>>(ApiMethod.GET, EndPoints.TradeList, true, para);
 
             return result;
         }
+        /// <summary>
+        /// Get trades for a specific account and symbol.
+        /// </summary>
+        /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Trade>> GetTradeList(string symbol, int limit, long recvWindow = 5000)
+        {
+            if (string.IsNullOrWhiteSpace(symbol))
+            {
+                throw new ArgumentException("symbol cannot be empty. ", "symbol");
+            }
+            var para = $"symbol={symbol.ToUpper()}&limit={limit}&recvWindow={recvWindow}";
+            var result = await _apiClient.CallAsync<IEnumerable<Trade>>(ApiMethod.GET, EndPoints.TradeList, true, para);
 
+            return result;
+        }
         /// <summary>
         /// Submit a withdraw request.
         /// </summary>

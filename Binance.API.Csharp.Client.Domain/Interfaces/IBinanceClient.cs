@@ -150,7 +150,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="symbol">Ticker symbol.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        Task<IEnumerable<Trade>> GetTradeList(string symbol, long recvWindow = 6000000);
+        Task<IEnumerable<Trade>> GetTradeList(string symbol, int limit, long fromId, long recvWindow = 5000);
 
         /// <summary>
         /// Submit a withdraw request.

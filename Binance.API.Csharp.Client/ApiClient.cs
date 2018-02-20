@@ -22,7 +22,7 @@ namespace Binance.API.Csharp.Client
         /// <param name="apiKey">Key used to authenticate within the API.</param>
         /// <param name="apiSecret">API secret used to signed API calls.</param>
         /// <param name="apiUrl">API base url.</param>
-        public ApiClient(string apiKey, string apiSecret, string apiUrl = @"https://www.binance.com", string webSocketEndpoint = @"wss://stream.binance.com:9443/ws/", bool addDefaultHeaders = true) : base(apiKey, apiSecret, apiUrl, webSocketEndpoint, addDefaultHeaders)
+        public ApiClient(string apiKey, string apiSecret, string apiUrl = @"https://us.binance.com", string webSocketEndpoint = @"wss://stream.binance.com:9443/ws/", bool addDefaultHeaders = true) : base(apiKey, apiSecret, apiUrl, webSocketEndpoint, addDefaultHeaders)
         {
         }
 
