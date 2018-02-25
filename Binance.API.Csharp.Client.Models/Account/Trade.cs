@@ -6,6 +6,8 @@ namespace Binance.API.Csharp.Client.Models.Account
     {
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("orderId")]
+        public int OrderId { get; set; }
         [JsonProperty("price")]
         public decimal Price { get; set; }
         [JsonProperty("qty")]
