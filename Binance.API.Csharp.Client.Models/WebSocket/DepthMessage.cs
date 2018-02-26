@@ -12,4 +12,10 @@ namespace Binance.API.Csharp.Client.Models.WebSocket
         public IEnumerable<OrderBookOffer> Bids { get; set; }
         public IEnumerable<OrderBookOffer> Asks { get; set; }
     }
+    public class DepthPartialMessage
+    { 
+        public int UpdateId { get; set; }
+        public IEnumerable<OrderBookOffer> Bids { get; set; }
+        public IEnumerable<OrderBookOffer> Asks { get; set; }
+    }
 }

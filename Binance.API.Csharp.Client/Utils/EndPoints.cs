@@ -17,7 +17,7 @@
         public static readonly string TickerPriceChange24H = "/api/v1/ticker/24hr";
         public static readonly string AllPrices = "/api/v1/ticker/allPrices";
         public static readonly string OrderBookTicker = "/api/v1/ticker/allBookTickers";
-        public static readonly string TradingRules = "https://gist.githubusercontent.com/Ninj0r/3029b9d635f8f81f5ffab9cc9df5cc61/raw/810530a2118e5d8cdcfcc4d220349976a0acf131/tradingRules_20171022.json";
+        public static readonly string TradingRules = "/api/v1/exchangeInfo";
         #endregion
 
         #region Account Endpoints

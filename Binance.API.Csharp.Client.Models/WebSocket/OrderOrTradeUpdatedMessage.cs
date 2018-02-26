@@ -11,7 +11,7 @@ namespace Binance.API.Csharp.Client.Models.WebSocket
         [JsonProperty("s")]
         public string Symbol { get; set; }
         [JsonProperty("c")]
-        public string NewClientOrderId { get; set; }
+        public string NewClientOrderId { get; set; } 
         [JsonProperty("S")]
         public string Side { get; set; }
         [JsonProperty("o")]
@@ -22,6 +22,15 @@ namespace Binance.API.Csharp.Client.Models.WebSocket
         public decimal OriginalQuantity { get; set; }
         [JsonProperty("p")]
         public decimal Price { get; set; }
+        [JsonProperty("P")]
+        public decimal StopPrice { get; set; }
+        [JsonProperty("F")]
+        public decimal IcebergQuantity { get; set; }
+        [JsonProperty("g")]
+        public int g { get; set; }
+
+        [JsonProperty("C")]
+        public string OriginalClientOrderId { get; set; }
         [JsonProperty("x")]
         public string ExecutionType { get; set; }
         [JsonProperty("X")]
@@ -29,7 +38,7 @@ namespace Binance.API.Csharp.Client.Models.WebSocket
         [JsonProperty("r")]
         public string RejectReason { get; set; }
         [JsonProperty("i")]
-        public int Orderid { get; set; }
+        public int OrderId { get; set; }
         [JsonProperty("l")]
         public decimal LastFilledTradeQuantity { get; set; }
         [JsonProperty("z")]
@@ -44,7 +53,22 @@ namespace Binance.API.Csharp.Client.Models.WebSocket
         public long TradeTime { get; set; }
         [JsonProperty("t")]
         public int TradeId { get; set; }
+        [JsonProperty("I")]
+        public int I { get; set; }
+        [JsonProperty("w")]
+        public bool IsOrderWorking { get; set; }
         [JsonProperty("m")]
         public bool BuyerIsMaker { get; set; }
+        [JsonProperty("M")]
+        public bool M { get; set; }
+        [JsonProperty("O")]
+        public int O { get; set; }
+        [JsonProperty("Z")]
+        public decimal Z { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
     }
 }

@@ -7,6 +7,7 @@ using Binance.API.Csharp.Client.Models.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebSocketSharp;
 using static Binance.API.Csharp.Client.Domain.Abstract.ApiClientAbstract;
 
 namespace Binance.API.Csharp.Client.Domain.Interfaces
@@ -85,8 +86,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, decimal icebergQty = 0m, long recvWindow = 6000000);
-
+        Task<NewOrder> PostNewOrder(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, string clientOrderId = null, decimal icebergQty = 0m, long recvWindow = 5000);
         /// <summary>
         /// Test new order creation and signature/recvWindow long. Creates and validates a new order but does not send it into the matching engine.
         /// </summary>
@@ -98,8 +98,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="timeInForce">Indicates how long an order will remain active before it is executed or expires.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, decimal icebergQty = 0m, long recvWindow = 6000000);
-
+        Task<dynamic> PostNewOrderTest(string symbol, decimal quantity, decimal price, OrderSide side, OrderType orderType = OrderType.LIMIT, TimeInForce timeInForce = TimeInForce.GTC, string clientOrderId = null, decimal icebergQty = 0m, long recvWindow = 5000);
         /// <summary>
         /// Check an order's status.
         /// </summary>
@@ -151,7 +150,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="symbol">Ticker symbol.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        Task<IEnumerable<Trade>> GetTradeList(string symbol, long recvWindow = 6000000);
+        Task<IEnumerable<Trade>> GetTradeList(string symbol, int limit, long fromId, long recvWindow = 5000);
 
         /// <summary>
         /// Submit a withdraw request.
@@ -210,27 +209,31 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         #endregion
 
         #region WebSocket
+
         /// <summary>
         /// Listen to the Depth endpoint.
         /// </summary>
         /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="messageHandler"></param>
         /// <param name="depthHandler">Handler to be used when a message is received.</param>
-        void ListenDepthEndpoint(string symbol, MessageHandler<DepthMessage> messageHandler);
+        WebSocket ListenDepthEndpoint(string symbol, MessageHandler<DepthMessage> messageHandler, Action<CloseEventArgs> onClose);
 
         /// <summary>
         /// Listen to the Kline endpoint.
         /// </summary>
         /// <param name="symbol">Ticker symbol.</param>
         /// <param name="interval">Time interval to retreive.</param>
+        /// <param name="messageHandler"></param>
         /// <param name="klineHandler">Handler to be used when a message is received.</param>
-        void ListenKlineEndpoint(string symbol, TimeInterval interval, MessageHandler<KlineMessage> messageHandler);
+        WebSocket ListenKlineEndpoint(string symbol, TimeInterval interval, MessageHandler<KlineMessage> messageHandler, Action<CloseEventArgs> onClose);
 
         /// <summary>
         /// Listen to the Trades endpoint.
         /// </summary>
         /// <param name="symbol">Ticker symbol.</param>
+        /// <param name="messageHandler"></param>
         /// <param name="tradeHandler">Handler to be used when a message is received.</param>
-        void ListenTradeEndpoint(string symbol, MessageHandler<AggregateTradeMessage> messageHandler);
+        WebSocket ListenTradeEndpoint(string symbol, MessageHandler<AggregateTradeMessage> messageHandler, Action<CloseEventArgs> onClose);
 
         /// <summary>
         /// Listen to the User Data endpoint.
@@ -239,7 +242,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="tradesHandler">Handler to be used when a trade message is received.</param>
         /// <param name="ordersHandler">Handler to be used when a order message is received.</param>
         /// <returns></returns>
-        string ListenUserDataEndpoint(MessageHandler<AccountUpdatedMessage> accountInfoHandler, MessageHandler<OrderOrTradeUpdatedMessage> tradesHandler, MessageHandler<OrderOrTradeUpdatedMessage> ordersHandler);
+        string ListenUserDataEndpoint(MessageHandler<AccountUpdatedMessage> accountInfoHandler, MessageHandler<OrderOrTradeUpdatedMessage> tradesHandler, MessageHandler<OrderOrTradeUpdatedMessage> ordersHandler, Action<CloseEventArgs> onClose);
         #endregion
     }
 }
