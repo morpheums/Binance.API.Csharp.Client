@@ -17,12 +17,12 @@ Get compressed, aggregate trades. Trades that fill at the time, from the same or
 ### Example:
  
 ```c#
-    var aggregateTrades = binanceClient.GetAggregateTrades("ethbtc").Result;
+    var aggregateTrades = binanceClient.GetAggregatedTrades("ethbtc").Result;
 ```
 ### Method Signature:
 
 ```c#
-    public async Task<IEnumerable<AggregateTrade>> GetAggregateTrades(string symbol, int limit = 500)
+    public async Task<IEnumerable<AggregateTrade>> GetAggregatedTrades(string symbol, int limit = 500)
 ```
 
 ## Get kline/candlesticks
