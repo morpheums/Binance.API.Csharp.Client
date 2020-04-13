@@ -429,9 +429,10 @@ namespace Binance.API.Csharp.Client
         /// <param name="amount">Amount to withdraw.</param>
         /// <param name="address">Address where the asset will be deposited.</param>
         /// <param name="addressName">Address name.</param>
+        /// <param name="addressTag">Address tag.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        public async Task<WithdrawResponse> Withdraw(string asset, decimal amount, string address, string addressName = "", long recvWindow = 5000)
+        public async Task<WithdrawResponse> Withdraw(string asset, decimal amount, string address, string addressTag = "", string addressName = "", long recvWindow = 5000)
         {
             if (string.IsNullOrWhiteSpace(asset))
             {
@@ -447,6 +448,7 @@ namespace Binance.API.Csharp.Client
             }
 
             var args = $"asset={asset.ToUpper()}&amount={amount}&address={address}"
+              + (!string.IsNullOrWhiteSpace(addressTag) ? $"&addressTag={addressTag}" : "")
               + (!string.IsNullOrWhiteSpace(addressName) ? $"&name={addressName}" : "")
               + $"&recvWindow={recvWindow}";
 
@@ -477,7 +479,7 @@ namespace Binance.API.Csharp.Client
               + (endTime.HasValue ? $"&endTime={endTime.Value.GetUnixTimeStamp()}" : "")
               + $"&recvWindow={recvWindow}";
 
-            var result = await _apiClient.CallAsync<DepositHistory>(ApiMethod.POST, EndPoints.DepositHistory, true, args);
+            var result = await _apiClient.CallAsync<DepositHistory>(ApiMethod.GET, EndPoints.DepositHistory, true, args);
 
             return result;
         }
