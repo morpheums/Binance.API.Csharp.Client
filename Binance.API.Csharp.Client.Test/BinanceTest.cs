@@ -120,7 +120,9 @@ namespace Binance.API.Csharp.Client.Test
         [TestMethod]
         public void GetAccountInfo()
         {
+            // I need
             var accountInfo = binanceClient.GetAccountInfo().Result;
+
         }
 
         [TestMethod]
@@ -132,12 +134,14 @@ namespace Binance.API.Csharp.Client.Test
         [TestMethod]
         public void Withdraw()
         {
-            var withdrawResult = binanceClient.Withdraw("AST", 100m, "@YourDepositAddress").Result;
+            // I need
+            var withdrawResult = binanceClient.Withdraw("AST", 100m, "@YourDepositAddress", null).Result;
         }
 
         [TestMethod]
         public void GetDepositHistory()
         {
+            // I need
             var depositHistory = binanceClient.GetDepositHistory("btc", DepositStatus.Success, new DateTime(2020)).Result;
 
             Assert.IsTrue(depositHistory.Success);

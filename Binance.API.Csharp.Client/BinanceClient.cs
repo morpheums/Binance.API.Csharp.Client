@@ -448,7 +448,7 @@ namespace Binance.API.Csharp.Client
             }
 
             var args = $"asset={asset.ToUpper()}&amount={amount}&address={address}"
-              + (!string.IsNullOrWhiteSpace(addressTag) ? $"&addressTag={addressTag}" : "")
+              + (!string.IsNullOrWhiteSpace(addressTag) && !string.IsNullOrEmpty(addressTag) ? $"&addressTag={addressTag}" : "")
               + (!string.IsNullOrWhiteSpace(addressName) ? $"&name={addressName}" : "")
               + $"&recvWindow={recvWindow}";
 
