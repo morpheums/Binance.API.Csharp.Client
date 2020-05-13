@@ -13,5 +13,11 @@ namespace Binance.API.Csharp.Client.Models.Account
         public string Msg { get; set; }
         [JsonProperty("success")]
         public bool Success { get; set; }
+
+
+        public override string ToString()
+        {
+            return $"WithdrawResponse.Success={Success} --- WithdrawResponse.Msg{Msg}";
+        }
     }
 }

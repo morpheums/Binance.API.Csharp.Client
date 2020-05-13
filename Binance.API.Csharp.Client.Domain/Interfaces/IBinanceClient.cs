@@ -162,7 +162,7 @@ namespace Binance.API.Csharp.Client.Domain.Interfaces
         /// <param name="addressName">Address name.</param>
         /// <param name="recvWindow">Specific number of milliseconds the request is valid for.</param>
         /// <returns></returns>
-        Task<WithdrawResponse> Withdraw(string asset, decimal amount, string address, string addressName = "", long recvWindow = 6000000);
+        Task<WithdrawResponse> Withdraw(string asset, decimal amount, string address, string addressTag = "", string addressName = "", long recvWindow = 6000000);
 
         /// <summary>
         /// Fetch deposit history.

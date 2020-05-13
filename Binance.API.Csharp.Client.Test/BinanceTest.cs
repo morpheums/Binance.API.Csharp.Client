@@ -2,13 +2,14 @@
 using Binance.API.Csharp.Client.Models.Enums;
 using System.Threading;
 using Binance.API.Csharp.Client.Models.WebSocket;
+using System;
 
 namespace Binance.API.Csharp.Client.Test
 {
     [TestClass]
     public class BinanceTest
     {
-        private static ApiClient apiClient = new ApiClient("@YourApiKey", "@YourApiSecret");
+        private static ApiClient apiClient = new ApiClient("Ax8fVbYarOuq3hJGiYlw62Oae78U0xvDbFUYlnenQxIQBWpbcxlC6N5NzFlviiUZ", "e3cKGFASMdaZKaRa64tKHnpTwOcKrZF1992xjWVWKEsjf7f2dL9prEHedtGltSWN");
         private static BinanceClient binanceClient = new BinanceClient(apiClient,false);
 
         #region General
@@ -119,7 +120,9 @@ namespace Binance.API.Csharp.Client.Test
         [TestMethod]
         public void GetAccountInfo()
         {
+            // I need
             var accountInfo = binanceClient.GetAccountInfo().Result;
+
         }
 
         [TestMethod]
@@ -131,13 +134,18 @@ namespace Binance.API.Csharp.Client.Test
         [TestMethod]
         public void Withdraw()
         {
-            var withdrawResult = binanceClient.Withdraw("AST", 100m, "@YourDepositAddress").Result;
+            // I need
+            var withdrawResult = binanceClient.Withdraw("AST", 100m, "@YourDepositAddress", null).Result;
         }
 
         [TestMethod]
         public void GetDepositHistory()
         {
-            var depositHistory = binanceClient.GetDepositHistory("neo", DepositStatus.Success).Result;
+            // I need
+            var depositHistory = binanceClient.GetDepositHistory("btc", DepositStatus.Success, new DateTime(2020)).Result;
+
+            Assert.IsTrue(depositHistory.Success);
+            Assert.IsNotNull(depositHistory.DepositList);
         }
 
         [TestMethod]
