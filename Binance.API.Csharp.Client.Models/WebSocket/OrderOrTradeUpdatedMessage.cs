@@ -29,7 +29,7 @@ namespace Binance.API.Csharp.Client.Models.WebSocket
         [JsonProperty("r")]
         public string RejectReason { get; set; }
         [JsonProperty("i")]
-        public int Orderid { get; set; }
+        public long? Orderid { get; set; }
         [JsonProperty("l")]
         public decimal LastFilledTradeQuantity { get; set; }
         [JsonProperty("z")]
